@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "chroma": {
+      "command": "uvx",
+      "args": [
+        "chroma-mcp",
+        "--client-type",
+        "cloud",
+        "--tenant",
+        "857e1d51-5109-4daa-b2c6-f33c16f31e15",
+        "--database",
+        "midnight-rag",
+        "--api-key",
+        "ck-CCi6Fcv9iLWrTnCqbrHo8W8szsfCmqR3Mzg5GgZ3jEZa"
+      ]
+    }
+  }
+}
