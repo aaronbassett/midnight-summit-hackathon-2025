@@ -1,0 +1,14 @@
+{
+  "name": "midnight-plugin",
+  "version": "2.0.0",
+  "description": "Offline-capable knowledge retrieval for midnight network blockchain and Compact smart contract development",
+  "author": {
+    "name": "midnight network",
+    "url": "https://github.com/aaronbassett/midnight-rigging"
+  },
+  "homepage": "https://github.com/aaronbassett/midnight-rigging#readme",
+  "repository": "https://github.com/aaronbassett/midnight-rigging",
+  "license": "MIT",
+  "keywords": ["midnight", "midnight-network", "blockchain", "compact", "zero-knowledge", "rag", "claude-code", "mcp", "smart-contracts", "privacy"],
+  "mcpServers": "./.mcp.json"
+}

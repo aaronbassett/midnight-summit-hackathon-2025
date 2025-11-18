@@ -1,0 +1,82 @@
+name: Basic Contract
+description: Minimal starter smart contract template for pod network with SharedCounter example
+
+version: 1.0.0
+author: pod network
+license: MIT
+homepage: https://pod.network
+documentation: https://docs.v1.pod.network/
+repository: https://github.com/podnetwork/pod-sdk
+bugs: https://github.com/podnetwork/pod-sdk/issues
+keywords:
+  - starter
+  - basic
+  - solidity
+  - smart-contract
+  - pod-network
+  - fasttypes
+  - blockchain
+
+longDescription: |
+  A minimal starter template for pod network smart contracts with basic structure and FastTypes example.
+
+  This template creates a simple contract that includes:
+  - SharedCounter FastType example for order-independent operations
+  - Owner management pattern
+  - Event emissions for state changes
+  - Basic structure ready for customization
+
+  Perfect for learning pod network development or starting a custom contract from scratch.
+  Remove the example counter and add your own business logic using FastTypes.
+
+useCases:
+  - Starting a new smart contract from scratch
+  - Learning pod network FastTypes and contract structure
+  - Prototyping custom contract logic
+  - Creating a minimal boilerplate for pod network
+
+requiredVariables:
+  - name: contract_name
+    description: Name of the contract (e.g., "MyContract", "GameLogic")
+
+optionalVariables:
+  - name: license
+    description: SPDX license identifier
+    default: 'MIT'
+
+exampleStructure:
+  - '{{contract_name}}.sol'
+
+structure:
+  overview: |
+    Creates a minimal Solidity contract with pod SDK imports and basic structure.
+
+    The contract includes:
+    - SharedCounter example showing FastType usage
+    - Owner management with transferOwnership
+    - Event emissions for tracking state changes
+    - Modifiers for access control
+
+    This is your starting point - customize by replacing the counter with your own
+    state variables and business logic.
+
+  keyFiles:
+    - path: '{{contract_name}}.sol'
+      purpose: |
+        Main contract file with minimal boilerplate and SharedCounter example.
+        Uses pod SDK for FastTypes to ensure order-independent execution.
+        Customize: Replace counter with your state variables and add custom functions.
+
+  commonCustomizations:
+    - 'Replace SharedCounter with Balance, OwnedCounter, or AddressSet based on needs'
+    - 'Add custom business logic functions using FastTypes'
+    - 'Implement time-based logic with requireTimeAfter/Before utilities'
+    - 'Add custom events for important state changes'
+    - 'Extend access control with role-based permissions'
+
+  nextSteps:
+    - 'Customize the contract by replacing the example counter'
+    - 'Add your business logic using FastTypes for order-independent operations'
+    - 'Add events for state changes you want to track'
+    - 'Test your contract for commutativity (operations work in any order)'
+    - 'Deploy to pod network and verify finality via attestations'

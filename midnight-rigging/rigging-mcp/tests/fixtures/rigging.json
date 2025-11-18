@@ -1,0 +1,20 @@
+{
+  "sources": [
+    {
+      "namespace": "test",
+      "description": "Test skills and agents",
+      "skills": "./skills",
+      "agents": "./agents"
+    },
+    {
+      "namespace": "pod",
+      "description": "pod network skills and agents",
+      "skills": "../../../../midnight-plugin/skills",
+      "agents": "../../../../midnight-plugin/agents"
+    }
+  ],
+  "server": {
+    "port": 3001,
+    "host": "localhost"
+  }
+}

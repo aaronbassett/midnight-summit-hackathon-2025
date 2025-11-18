@@ -1,0 +1,5 @@
+name: Single File
+description: Single file template
+requiredVariables:
+  - name: content
+    description: Content

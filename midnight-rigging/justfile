@@ -1,0 +1,457 @@
+# pod-rigging justfile
+# Task runner for development, testing, and validation
+# https://just.systems/
+
+# Default recipe to display help
+default:
+    @just --list
+
+# =============================================================================
+# Testing
+# =============================================================================
+
+# Run all tests (root + servers + rigging-mcp)
+test:
+    @echo "Running all tests..."
+    npm test
+    cd midnight-plugin/servers && pnpm test
+    cd rigging-mcp && npm test
+
+# Run all tests in watch mode
+test-watch:
+    @echo "Running tests in watch mode..."
+    npm run test:watch
+
+# Run tests with UI
+test-ui:
+    @echo "Opening test UI..."
+    npm run test:ui
+
+# Run tests with coverage
+test-coverage:
+    @echo "Running tests with coverage..."
+    npm run test:coverage
+
+# Run reranking server tests only
+test-reranking:
+    @echo "Running reranking server tests..."
+    cd midnight-plugin/servers && pnpm test
+
+# Run reranker unit tests
+test-reranker:
+    @echo "Running reranker unit tests..."
+    cd midnight-plugin/servers && pnpm test:reranker
+
+# Run queue unit tests
+test-queue:
+    @echo "Running queue unit tests..."
+    cd midnight-plugin/servers && pnpm test:queue
+
+# Run reranking integration tests
+test-integration:
+    @echo "Running reranking integration tests..."
+    cd midnight-plugin/servers && pnpm test:integration
+
+# Run reranking tests in watch mode
+test-reranking-watch:
+    @echo "Running reranking tests in watch mode..."
+    cd midnight-plugin/servers && pnpm test:watch
+
+# Run templating server tests only
+test-templating:
+    @echo "Running templating server tests..."
+    cd midnight-plugin/servers && pnpm test:templating
+
+# Run templating tests in watch mode
+test-templating-watch:
+    @echo "Running templating tests in watch mode..."
+    cd midnight-plugin/servers && pnpm test:templating:watch
+
+# Run pod network server tests only
+test-midnight-network:
+    @echo "Running pod network server tests..."
+    cd midnight-plugin/servers && pnpm test:midnight-network
+
+# Run pod network tests in watch mode
+test-midnight-network-watch:
+    @echo "Running pod network tests in watch mode..."
+    cd midnight-plugin/servers && pnpm test:midnight-network:watch
+
+# Run rigging-mcp server tests only
+test-rigging-mcp:
+    @echo "Running rigging-mcp server tests..."
+    cd rigging-mcp && npm test
+
+# Run rigging-mcp tests in watch mode
+test-rigging-mcp-watch:
+    @echo "Running rigging-mcp tests in watch mode..."
+    cd rigging-mcp && npm run test:watch
+
+# =============================================================================
+# Code Quality
+# =============================================================================
+
+# Lint entire project
+lint:
+    @echo "Linting project..."
+    npm run lint
+
+# Lint and auto-fix issues
+lint-fix:
+    @echo "Linting and fixing issues..."
+    npm run lint:fix
+
+# Format entire project
+format:
+    @echo "Formatting project..."
+    npm run format
+
+# Check formatting without modifying files
+format-check:
+    @echo "Checking formatting..."
+    npm run format:check
+
+# Run TypeScript type checking (all projects)
+type-check:
+    @echo "Type checking TypeScript..."
+    cd midnight-plugin/servers && pnpm type-check
+    cd rigging-mcp && npm run type-check
+
+# Type check rigging-mcp server
+type-check-rigging-mcp:
+    @echo "Type checking rigging-mcp..."
+    cd rigging-mcp && npm run type-check
+
+# =============================================================================
+# Build
+# =============================================================================
+
+# Build TypeScript servers and rigging-mcp
+build:
+    @echo "Building TypeScript servers..."
+    cd midnight-plugin/servers && pnpm build
+    @echo "Building rigging-mcp server..."
+    cd rigging-mcp && npm run build
+
+# Build rigging-mcp server only
+build-rigging-mcp:
+    @echo "Building rigging-mcp server..."
+    cd rigging-mcp && npm run build
+
+# Clean build artifacts (all projects)
+clean:
+    @echo "Cleaning build artifacts..."
+    cd midnight-plugin/servers && pnpm clean
+    @echo "Cleaning rigging-mcp build artifacts..."
+    cd rigging-mcp && rm -rf dist
+
+# Clean rigging-mcp build artifacts only
+clean-rigging-mcp:
+    @echo "Cleaning rigging-mcp build artifacts..."
+    cd rigging-mcp && rm -rf dist
+
+# Clean and rebuild
+rebuild: clean build
+
+# =============================================================================
+# Pre-commit Validation
+# =============================================================================
+
+# Run all pre-commit checks (format, lint, type-check, tests)
+pre-commit:
+    @echo "==================================================="
+    @echo "Running pre-commit validation..."
+    @echo "==================================================="
+    @echo ""
+    @echo "📝 Step 1/7: Checking formatting..."
+    npm run format:check
+    @echo "✓ Formatting check passed"
+    @echo ""
+    @echo "🔍 Step 2/7: Linting..."
+    npm run lint
+    @echo "✓ Linting passed"
+    @echo ""
+    @echo "📘 Step 3/7: Type checking midnight-plugin servers..."
+    cd midnight-plugin/servers && pnpm type-check
+    @echo "✓ Pod-plugin type checking passed"
+    @echo ""
+    @echo "📘 Step 4/7: Type checking rigging-mcp..."
+    cd rigging-mcp && npm run type-check
+    @echo "✓ rigging-mcp type checking passed"
+    @echo ""
+    @echo "🧪 Step 5/7: Running root tests..."
+    npm test
+    @echo "✓ Root tests passed"
+    @echo ""
+    @echo "🧪 Step 6/7: Running server tests..."
+    cd midnight-plugin/servers && pnpm test
+    @echo "✓ Server tests passed"
+    @echo ""
+    @echo "🧪 Step 7/7: Running rigging-mcp tests..."
+    cd rigging-mcp && npm test
+    @echo "✓ rigging-mcp tests passed"
+    @echo ""
+    @echo "==================================================="
+    @echo "✅ All pre-commit checks passed!"
+    @echo "==================================================="
+
+# Auto-fix issues before commit (format + lint fix)
+pre-commit-fix:
+    @echo "Auto-fixing issues..."
+    npm run format
+    npm run lint:fix
+    @echo "✓ Auto-fix complete. Run 'just pre-commit' to validate."
+
+# =============================================================================
+# Git Workflow Helpers
+# =============================================================================
+
+# Quick check before commit (format, lint, type-check only - no tests)
+quick-check:
+    @echo "Running quick validation (no tests)..."
+    npm run format:check
+    npm run lint
+    cd midnight-plugin/servers && pnpm type-check
+    cd rigging-mcp && npm run type-check
+    @echo "✓ Quick check passed"
+
+# Full validation (same as pre-commit)
+validate: pre-commit
+
+# =============================================================================
+# Development
+# =============================================================================
+
+# Install all dependencies
+install:
+    @echo "Installing dependencies..."
+    npm ci
+    cd midnight-plugin/servers && pnpm install
+    cd rigging-mcp && npm ci
+
+# Update dependencies
+update:
+    @echo "Updating dependencies..."
+    npm update
+    cd midnight-plugin/servers && pnpm update
+    cd rigging-mcp && npm update
+
+# Run development RAG server
+dev-rag:
+    @echo "Starting RAG server in development mode..."
+    cd midnight-plugin/servers && pnpm dev:rag
+
+# Run rigging-mcp server in development mode
+dev-rigging-mcp:
+    @echo "Starting rigging-mcp server..."
+    @echo "  Config: rigging-mcp/rigging.json"
+    @echo "  Port: 3001 (test fixtures) or 3000 (default)"
+    @echo "  Endpoints:"
+    @echo "    - GET /discovery"
+    @echo "    - GET /prompts/{namespace}/{name}"
+    @echo "    - GET /resources/{namespace}/{name}"
+    @echo "    - GET /references/{namespace}/{skillName}/{refName}"
+    @echo ""
+    cd rigging-mcp && npm start
+
+# Run rigging-mcp server with custom config
+dev-rigging-mcp-custom CONFIG:
+    @echo "Starting rigging-mcp server with custom config..."
+    cd rigging-mcp && npm start -- --config {{CONFIG}}
+
+# =============================================================================
+# MCP Inspector (Server Testing & Debugging)
+# =============================================================================
+
+# Start MCP Inspector for RAG server
+inspector-rag:
+    @echo "Building servers..."
+    @cd midnight-plugin/servers && pnpm build
+    @echo ""
+    @echo "🔍 Starting MCP Inspector for RAG server..."
+    @echo "   Server: midnight-rag"
+    @echo "   Endpoint: https://midnight-rag-mcp.fly.dev"
+    @echo "   Config: midnight-plugin/.mcp.json"
+    @echo ""
+    cd midnight-plugin && npx @modelcontextprotocol/inspector --config .mcp.json --server midnight-rag
+
+# Start MCP Inspector for reranking server
+inspector-reranking:
+    @echo "Building servers..."
+    @cd midnight-plugin/servers && pnpm build
+    @echo ""
+    @echo "🔍 Starting MCP Inspector for reranking server..."
+    @echo "   Server: midnight-reranking"
+    @echo "   Model: Xenova/bge-reranker-base (~280MB, will download on first run)"
+    @echo "   Config: midnight-plugin/.mcp.json"
+    @echo ""
+    cd midnight-plugin && npx @modelcontextprotocol/inspector --config .mcp.json --server midnight-reranking
+
+# Start MCP Inspector for pod network server
+inspector-midnight-network:
+    @echo "Building servers..."
+    @cd midnight-plugin/servers && pnpm build
+    @echo ""
+    @echo "🔍 Starting MCP Inspector for pod network server..."
+    @echo "   Server: midnight-network"
+    @echo "   RPC: wss://rpc.testnet-02.midnight.network"
+    @echo "   Config: midnight-plugin/.mcp.json"
+    @echo ""
+    cd midnight-plugin && npx @modelcontextprotocol/inspector --config .mcp.json --server midnight-network
+
+# Start MCP Inspector for templating server
+inspector-templating:
+    @echo "Building servers..."
+    @cd midnight-plugin/servers && pnpm build
+    @echo ""
+    @echo "🔍 Starting MCP Inspector for templating server..."
+    @echo "   Server: midnight-templating"
+    @echo "   Templates: Bundled pod network smart contract examples"
+    @echo "   Config: midnight-plugin/.mcp.json"
+    @echo ""
+    cd midnight-plugin && npx @modelcontextprotocol/inspector --config .mcp.json --server midnight-templating
+
+# Start MCP Inspector for all servers (in separate terminals)
+inspector-all:
+    @echo "⚠️  This command will launch 4 inspector instances."
+    @echo "    Make sure you have 4 terminal windows ready!"
+    @echo ""
+    @echo "Run these commands in separate terminals:"
+    @echo "  Terminal 1: just inspector-rag"
+    @echo "  Terminal 2: just inspector-reranking"
+    @echo "  Terminal 3: just inspector-midnight-network"
+    @echo "  Terminal 4: just inspector-templating"
+
+# =============================================================================
+# CI/CD Simulation
+# =============================================================================
+
+# Simulate CI pipeline locally
+ci:
+    @echo "==================================================="
+    @echo "Simulating CI pipeline..."
+    @echo "==================================================="
+    @echo ""
+    @echo "📦 Installing dependencies..."
+    cd midnight-plugin/servers && pnpm install --frozen-lockfile
+    cd rigging-mcp && npm ci
+    @echo ""
+    @echo "🏗️  Building..."
+    cd midnight-plugin/servers && pnpm build
+    cd rigging-mcp && npm run build
+    @echo ""
+    @echo "📝 Checking formatting..."
+    npm run format:check
+    @echo ""
+    @echo "🔍 Linting..."
+    npm run lint
+    @echo ""
+    @echo "📘 Type checking..."
+    cd midnight-plugin/servers && pnpm type-check
+    cd rigging-mcp && npm run type-check
+    @echo ""
+    @echo "🧪 Running tests..."
+    npm test
+    cd midnight-plugin/servers && pnpm test
+    cd rigging-mcp && npm test
+    @echo ""
+    @echo "==================================================="
+    @echo "✅ CI simulation passed!"
+    @echo "==================================================="
+
+# =============================================================================
+# Plugin Validation
+# =============================================================================
+
+# Validate plugin structure and files
+validate-plugin:
+    @echo "Validating plugin structure..."
+    @test -f midnight-plugin/.claude-plugin/plugin.json || (echo "❌ Missing plugin.json" && exit 1)
+    @test -f midnight-plugin/.mcp.json || (echo "❌ Missing .mcp.json" && exit 1)
+    @test -d midnight-plugin/skills/rag-query || (echo "❌ Missing rag-query skill" && exit 1)
+    @echo "✓ Plugin structure valid"
+    @echo ""
+    @echo "Validating JSON files..."
+    @node -e "JSON.parse(require('fs').readFileSync('midnight-plugin/.claude-plugin/plugin.json'))" || (echo "❌ Invalid plugin.json" && exit 1)
+    @node -e "JSON.parse(require('fs').readFileSync('midnight-plugin/.mcp.json'))" || (echo "❌ Invalid .mcp.json" && exit 1)
+    @node -e "JSON.parse(require('fs').readFileSync('midnight-plugin/servers/package.json'))" || (echo "❌ Invalid servers/package.json" && exit 1)
+    @echo "✓ All JSON files valid"
+    @echo ""
+    @echo "Checking plugin directory boundary..."
+    @test ! -f midnight-plugin/README.md || (echo "❌ Found README.md in plugin (should be at root)" && exit 1)
+    @test ! -f midnight-plugin/DEVELOPMENT.md || (echo "❌ Found DEVELOPMENT.md in plugin" && exit 1)
+    @test ! -d midnight-plugin/tests || (echo "❌ Found tests/ in plugin" && exit 1)
+    @echo "✓ Plugin directory boundary respected"
+    @echo ""
+    @echo "✅ Plugin validation complete"
+
+# Validate test fixtures
+validate-fixtures:
+    @echo "Validating test fixtures..."
+    @node -e "JSON.parse(require('fs').readFileSync('midnight-plugin/servers/tests/reranking/fixtures/queries.json'))" || (echo "❌ Invalid queries.json" && exit 1)
+    @node -e "JSON.parse(require('fs').readFileSync('midnight-plugin/servers/tests/reranking/fixtures/chunks.json'))" || (echo "❌ Invalid chunks.json" && exit 1)
+    @echo "✓ Test fixtures valid"
+
+# Validate rigging-mcp server
+validate-rigging-mcp:
+    @echo "Validating rigging-mcp server..."
+    @test -f rigging-mcp/package.json || (echo "❌ Missing rigging-mcp/package.json" && exit 1)
+    @test -f rigging-mcp/tsconfig.json || (echo "❌ Missing rigging-mcp/tsconfig.json" && exit 1)
+    @test -f rigging-mcp/Dockerfile || (echo "❌ Missing rigging-mcp/Dockerfile" && exit 1)
+    @test -f rigging-mcp/rigging.json.example || (echo "❌ Missing rigging-mcp/rigging.json.example" && exit 1)
+    @test -d rigging-mcp/src || (echo "❌ Missing rigging-mcp/src directory" && exit 1)
+    @test -d rigging-mcp/tests/fixtures || (echo "❌ Missing rigging-mcp/tests/fixtures" && exit 1)
+    @echo "✓ rigging-mcp structure valid"
+    @echo ""
+    @echo "Validating rigging-mcp JSON files..."
+    @node -e "JSON.parse(require('fs').readFileSync('rigging-mcp/package.json'))" || (echo "❌ Invalid rigging-mcp/package.json" && exit 1)
+    @node -e "JSON.parse(require('fs').readFileSync('rigging-mcp/rigging.json.example'))" || (echo "❌ Invalid rigging-mcp/rigging.json.example" && exit 1)
+    @echo "✓ All rigging-mcp JSON files valid"
+    @echo ""
+    @echo "Checking rigging-mcp is at repository root..."
+    @test -d rigging-mcp || (echo "❌ rigging-mcp not at repository root" && exit 1)
+    @test ! -d midnight-plugin/rigging-mcp || (echo "❌ rigging-mcp should NOT be in midnight-plugin" && exit 1)
+    @echo "✓ rigging-mcp correctly located at repository root"
+    @echo ""
+    @echo "✅ rigging-mcp validation complete"
+
+# =============================================================================
+# Documentation
+# =============================================================================
+
+# Show project structure
+tree:
+    @echo "Project structure:"
+    tree -L 3 -I 'node_modules|dist|.git' .
+
+# Show test file locations
+show-tests:
+    @echo "Test locations:"
+    @echo ""
+    @echo "Root tests (vitest):"
+    @find . -name "*.test.ts" -o -name "*.test.js" | grep -v node_modules | grep -v midnight-plugin/servers | grep -v tests/templating | sort
+    @echo ""
+    @echo "Server tests:"
+    @echo "  Reranking (node:test):"
+    @find midnight-plugin/servers/tests/reranking -name "*.test.ts" 2>/dev/null | sort || echo "    (none)"
+    @echo "  Templating (node:test):"
+    @find tests/templating -name "*.test.ts" 2>/dev/null | sort || echo "    (none)"
+    @echo "  pod network (vitest):"
+    @find midnight-plugin/servers/tests/midnight-network -name "*.test.ts" 2>/dev/null | sort || echo "    (none)"
+
+# Show key project metrics
+metrics:
+    @echo "Project Metrics:"
+    @echo ""
+    @echo "Test files:"
+    @find midnight-plugin/servers/tests -name "*.test.ts" | wc -l | xargs echo "  Server tests:"
+    @find tests -name "*.test.js" | wc -l | xargs echo "  Root tests:"
+    @echo ""
+    @echo "TypeScript files:"
+    @find midnight-plugin/servers/src -name "*.ts" | wc -l | xargs echo "  Server sources:"
+    @echo ""
+    @echo "Lines of code (TypeScript):"
+    @find midnight-plugin/servers/src -name "*.ts" -exec wc -l {} + | tail -1
+    @echo ""
+    @echo "Test coverage:"
+    @cd midnight-plugin/servers && pnpm test 2>&1 | grep -E "(tests|pass)" || echo "  Run 'just test' for details"

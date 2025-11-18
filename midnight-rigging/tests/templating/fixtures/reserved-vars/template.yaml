@@ -1,0 +1,13 @@
+name: Reserved Variables Test Template
+description: Template that uses reserved variable names (should fail validation)
+
+requiredVariables:
+  - name: USER_NAME
+    description: This uses reserved name pattern (all uppercase with underscores)
+  - name: MY_VAR
+    description: Another reserved name pattern
+  - name: project_name
+    description: This is valid (lowercase with underscores)
+
+exampleStructure:
+  - 'README.md'

@@ -1,0 +1,6 @@
+name: Missing Description Template
+# description field is missing - this should cause validation to fail
+
+requiredVariables:
+  - name: test
+    description: Test variable

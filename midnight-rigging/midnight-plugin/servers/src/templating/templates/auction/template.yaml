@@ -1,0 +1,89 @@
+name: Auction
+description: Auction contract with Balance FastType and time utilities for pod network
+
+version: 1.0.0
+author: pod network
+license: MIT
+homepage: https://pod.network
+documentation: https://docs.v1.pod.network/
+repository: https://github.com/podnetwork/pod-sdk
+bugs: https://github.com/podnetwork/pod-sdk/issues
+keywords:
+  - auction
+  - bidding
+  - marketplace
+  - solidity
+  - smart-contract
+  - pod-network
+  - fasttypes
+
+longDescription: |
+  An auction contract for pod network using Balance FastType and time utilities.
+
+  This template creates a standalone auction contract that includes:
+  - Balance FastType for bid tracking
+  - Time utilities (requireTimeAfter/Before) for auction periods
+  - Bid withdrawal for non-winners
+  - Winner selection and finalization
+  - Reserve price support
+
+  Perfect for NFT auctions, asset sales, competitive bidding, and price discovery.
+
+useCases:
+  - NFT auctions
+  - Asset sales
+  - Competitive bidding systems
+  - Price discovery mechanisms
+
+requiredVariables:
+  - name: contract_name
+    description: Name of the contract class (e.g., "NFTAuction", "AssetSale")
+  - name: item_description
+    description: Item being auctioned (e.g., "Rare NFT #123", "Digital Asset")
+  - name: auction_duration
+    description: Auction duration in seconds (e.g., "259200" for 3 days)
+  - name: reserve_price
+    description: Minimum acceptable bid in wei (e.g., "1000000000000000000" for 1 ETH)
+
+optionalVariables:
+  - name: license
+    description: SPDX license identifier
+    default: 'MIT'
+
+exampleStructure:
+  - '{{contract_name}}.sol'
+
+structure:
+  overview: |
+    Creates a standalone auction contract using Balance FastType.
+
+    The contract includes:
+    - Balance FastType for bid tracking
+    - Time utilities for auction period enforcement
+    - Bid withdrawal for non-winners
+    - Winner selection after auction ends
+    - Reserve price enforcement
+
+    Uses pod SDK FastTypes and time utilities for correct behavior.
+
+  keyFiles:
+    - path: '{{contract_name}}.sol'
+      purpose: |
+        Main auction contract with Balance and time utilities.
+        Includes bidding, finalization, and withdrawal functions.
+        Customize: Add minimum bid increments, automatic time extension, or buy-now price.
+
+  commonCustomizations:
+    - 'Add minimum bid increments'
+    - 'Implement automatic time extension on late bids'
+    - 'Add buy-now price for instant purchase'
+    - 'Support multiple item auctions'
+    - 'Add bid sniping protection'
+
+  nextSteps:
+    - "Run 'forge install podnetwork/pod-sdk' to install dependencies"
+    - 'Compile the contract with your Solidity compiler'
+    - 'Deploy with constructor parameters (description, duration, reservePrice)'
+    - 'Users call bid() with ETH during auction'
+    - 'Call finalize() after auction ends'
+    - 'Non-winners call withdraw() to get bids back'

@@ -1,0 +1,9 @@
+name: Undeclared Variables Test Template
+description: Template with undeclared variables in source files
+
+requiredVariables:
+  - name: project_name
+    description: Name of the project
+
+exampleStructure:
+  - 'README.md'

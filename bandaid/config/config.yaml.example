@@ -1,0 +1,99 @@
+# Bandaid LLM Security Proxy - Example Configuration
+# Copy this file to ~/.bandaid/config.toml and customize as needed
+# or run 'guardrail setup' for interactive configuration
+
+[proxy]
+host = "0.0.0.0"
+port = 8000
+workers = 1
+reload = false  # Set to true for development
+
+[dashboard]
+host = "127.0.0.1"  # Localhost only for security
+port = 8001
+enabled = true
+
+[models]
+# Model loading strategy
+lazy_load = true  # Load models on first use to reduce startup time
+device = "auto"   # Options: "cpu", "cuda", "mps", "auto"
+
+# NER model for PII/secret detection
+[models.ner]
+model_name = "dslim/bert-base-NER"
+enabled = true
+
+# Llama Guard for policy enforcement
+[models.guard]
+model_name = "meta-llama/Llama-Guard-3-8B-INT8"
+enabled = true
+timeout_seconds = 2.0  # Graceful degradation if Guard is slow
+
+# Embeddings for self-learning
+[models.embeddings]
+model_name = "sentence-transformers/all-MiniLM-L6-v2"
+enabled = true
+
+[security]
+# Confidence thresholds
+[security.confidence]
+high = 0.9      # Block immediately
+medium_min = 0.5    # Run additional checks (Guard)
+low = 0.3       # Log only, allow request
+
+# Feature flags for security checks
+[security.checks]
+ner_enabled = true
+guard_enabled = true
+regex_enabled = true
+seed_phrase_enabled = true
+embeddings_enabled = true
+
+# Redaction settings
+[security.redaction]
+enabled = true
+placeholder = "[REDACTED]"
+
+[storage]
+# SQLite configuration
+[storage.sqlite]
+path = "./data/events.db"
+retention_days = 30
+
+# ChromaDB configuration
+[storage.chromadb]
+path = "./data/chroma"
+collection_name = "attack_patterns"
+
+# LLM Provider configurations
+# Run 'guardrail setup' to add providers interactively
+# API keys will be encrypted automatically
+
+[[providers]]
+provider = "openai"
+api_key = "${OPENAI_API_KEY}"  # Use environment variable
+# base_url = "https://api.openai.com/v1"  # Optional custom base URL
+timeout = 30
+default = true
+
+# Example: Add more providers as needed
+# [[providers]]
+# provider = "anthropic"
+# api_key = "${ANTHROPIC_API_KEY}"
+# timeout = 30
+# default = false
+
+[observability]
+# Sentry integration (optional)
+[observability.sentry]
+dsn = "${SENTRY_DSN}"  # Empty string disables Sentry
+environment = "production"
+traces_sample_rate = 0.1
+
+# Logging configuration
+[observability.logging]
+level = "INFO"  # Options: DEBUG, INFO, WARNING, ERROR
+format = "json"  # Options: json, text
+
+# Disabled checks (for testing only - not recommended for production)
+disabled_checks = []  # Example: ["pii", "financial_secret"]

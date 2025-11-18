@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+midnight-plugin/node_modules/
+
+# Build outputs
+dist/
+build/
+*.tgz
+
+# Data files
+midnight-plugin/data/
+
+# Logs
+logs/
+*.log
+
+# Coverage
+coverage/
+.nyc_output/
+
+# Generated files
+package-lock.json
+midnight-plugin/package-lock.json
+
+# GitHub workflows (use GitHub Actions YAML formatting standards)
+.github/workflows/
+
+# Test fixtures (intentionally malformed/template files)
+tests/templating/fixtures/
+midnight-plugin/servers/tests/templating/fixtures/

@@ -1,0 +1,98 @@
+# Bandaid Development Commands
+# Run `just --list` to see all available commands
+
+# Python and tool paths
+python := "venv/bin/python"
+pytest := "venv/bin/pytest"
+ruff := "venv/bin/ruff"
+mypy := "venv/bin/mypy"
+guardrail := "venv/bin/guardrail"
+
+# Default recipe shows help
+default:
+    @just --list
+
+# Install development dependencies
+install:
+    python -m pip install --upgrade pip
+    pip install -e ".[dev]"
+
+# Run tests
+test:
+    {{pytest}} tests/ -v
+
+# Run tests matching a pattern (e.g., just test-match test_hooks)
+test-match pattern:
+    {{pytest}} tests/ -v -k "{{pattern}}"
+
+# Run ruff linting check
+lint:
+    {{ruff}} check .
+
+# Auto-fix ruff linting issues
+lint-fix:
+    {{ruff}} check . --fix
+
+# Check code formatting
+format-check:
+    {{ruff}} format --check .
+
+# Auto-format code
+format:
+    {{ruff}} format .
+
+# Run mypy type checking
+mypy:
+    {{mypy}} src/ --ignore-missing-imports
+
+# Run all CI checks locally (same as GitHub Actions)
+ci: lint format-check mypy test
+    @echo ""
+    @echo "✅ All CI checks passed!"
+    @echo ""
+
+# Clean build artifacts and caches
+clean:
+    rm -rf build/
+    rm -rf dist/
+    rm -rf *.egg-info
+    rm -rf .pytest_cache/
+    rm -rf .ruff_cache/
+    rm -rf .mypy_cache/
+    rm -rf .coverage
+    rm -rf coverage.xml
+    rm -rf htmlcov/
+    find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
+    find . -type f -name "*.pyc" -delete
+
+# Start the proxy server (foreground)
+start:
+    {{guardrail}} start --foreground
+
+# Run setup wizard
+setup:
+    {{guardrail}} setup
+
+# Show proxy status
+status:
+    {{guardrail}} status
+
+# Stop the proxy server
+stop:
+    {{guardrail}} stop
+
+# Open the dashboard
+dashboard:
+    {{guardrail}} dashboard
+
+# Validate configuration
+validate:
+    {{guardrail}} validate
+
+# Run the development server with auto-reload
+dev:
+    {{guardrail}} start --foreground --reload
+
+# Show config
+config:
+    {{guardrail}} config show

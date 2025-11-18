@@ -1,0 +1,69 @@
+name: Complex Test Template
+description: A complex test template with nested directories and multiple variables
+
+version: 2.0.0
+author: Test Team
+license: Apache-2.0
+homepage: https://example.com
+documentation: https://docs.example.com
+repository: https://github.com/example/repo
+bugs: https://github.com/example/repo/issues
+keywords:
+  - test
+  - complex
+  - nested
+
+longDescription: |
+  This is a complex test template that includes nested directory structures,
+  multiple file types, and comprehensive variable substitution patterns.
+
+useCases:
+  - Testing nested directory rendering
+  - Testing complex variable substitution
+  - Testing full metadata support
+
+requiredVariables:
+  - name: project_name
+    description: Name of the project
+  - name: module_name
+    description: Name of the main module
+
+optionalVariables:
+  - name: version
+    description: Project version
+    default: '0.1.0'
+  - name: author
+    description: Project author
+    default: 'Test Developer'
+  - name: license
+    description: Project license
+    default: 'MIT'
+
+exampleStructure:
+  - 'Cargo.toml'
+  - 'src/{{module_name}}/mod.ts'
+  - 'src/{{module_name}}/{{module_name}}.ts'
+  - 'README.md'
+
+structure:
+  overview: |
+    Creates a TypeScript project with a modular structure. The main module
+    is located in src/{{module_name}}/ directory.
+
+  keyFiles:
+    - path: 'Cargo.toml'
+      purpose: 'Project manifest with dependencies and metadata'
+    - path: 'src/{{module_name}}/mod.ts'
+      purpose: 'Module entry point - exports public API'
+    - path: 'src/{{module_name}}/{{module_name}}.ts'
+      purpose: 'Main module implementation'
+
+  commonCustomizations:
+    - 'Add additional modules in src/ directory'
+    - 'Update dependencies in Cargo.toml'
+    - 'Extend module functionality'
+
+  nextSteps:
+    - 'Run build command to compile'
+    - 'Add tests in tests/ directory'
+    - 'Update documentation'

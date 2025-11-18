@@ -1,0 +1,15 @@
+{
+  "$schema": "https://raw.githubusercontent.com/aaronbassett/pod-rigging/main/rigging-mcp/rigging.schema.json",
+  "sources": [
+    {
+      "namespace": "pod",
+      "description": "pod network official skills and agents",
+      "skills": "../midnight-plugin/skills",
+      "agents": "../midnight-plugin/agents"
+    }
+  ],
+  "server": {
+    "port": 3000,
+    "host": "localhost"
+  }
+}

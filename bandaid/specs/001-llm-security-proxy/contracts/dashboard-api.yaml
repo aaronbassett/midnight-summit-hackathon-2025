@@ -1,0 +1,480 @@
+openapi: 3.0.3
+info:
+  title: Bandaid Dashboard API
+  description: |
+    Local web dashboard API for viewing security events, statistics, and learned patterns.
+    Provides real-time visibility into threat detection and proxy activity.
+
+    **Features:**
+    - Event log with filtering and pagination
+    - Real-time statistics and threat breakdowns
+    - Learned attack pattern insights
+    - Configuration status display
+
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8001
+    description: Local dashboard server (default)
+
+tags:
+  - name: Dashboard
+    description: Dashboard UI serving
+  - name: Statistics
+    description: Aggregate statistics endpoints
+  - name: Events
+    description: Security event log endpoints
+  - name: Patterns
+    description: Learned attack pattern endpoints
+
+paths:
+  /dashboard:
+    get:
+      tags:
+        - Dashboard
+      summary: Serve dashboard UI
+      description: |
+        Returns the static HTML dashboard page. This is the main entry point for
+        the web UI.
+      operationId: serveDashboard
+      responses:
+        '200':
+          description: Dashboard HTML page
+          content:
+            text/html:
+              schema:
+                type: string
+
+  /api/stats:
+    get:
+      tags:
+        - Statistics
+      summary: Get dashboard statistics
+      description: |
+        Returns aggregate statistics for the dashboard including total requests,
+        blocked count, allowed count, and threat type breakdown.
+      operationId: getStatistics
+      parameters:
+        - name: time_range
+          in: query
+          description: Time range for statistics
+          schema:
+            type: string
+            enum: [1h, 24h, 7d, 30d, all]
+            default: 24h
+      responses:
+        '200':
+          description: Statistics retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Statistics'
+              example:
+                total_requests: 1523
+                blocked_count: 42
+                allowed_count: 1481
+                medium_confidence_warnings: 18
+                data_leak_alerts: 3
+                threat_breakdown:
+                  prompt_injection: 25
+                  pii: 10
+                  financial_secret: 4
+                  jailbreak: 2
+                  toxic_content: 1
+                detection_layer_breakdown:
+                  ner: 35
+                  guard: 5
+                  embedding_match: 2
+                time_range: "24h"
+                generated_at: "2025-11-12T15:30:00Z"
+
+  /api/events:
+    get:
+      tags:
+        - Events
+      summary: Get security events
+      description: |
+        Returns paginated list of security events with filtering support.
+        All sensitive data is redacted before returning.
+      operationId: getEvents
+      parameters:
+        - name: page
+          in: query
+          description: Page number (1-indexed)
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: per_page
+          in: query
+          description: Events per page
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: event_type
+          in: query
+          description: Filter by event type
+          schema:
+            type: string
+            enum: [blocked, allowed, data_leak_alert, medium_confidence_warning]
+        - name: threat_type
+          in: query
+          description: Filter by threat type
+          schema:
+            type: string
+            enum: [prompt_injection, jailbreak, pii, financial_secret, toxic_content]
+        - name: severity
+          in: query
+          description: Filter by severity
+          schema:
+            type: string
+            enum: [critical, high, medium, low, info]
+        - name: confidence_min
+          in: query
+          description: Minimum confidence level
+          schema:
+            type: number
+            minimum: 0
+            maximum: 1
+        - name: start_time
+          in: query
+          description: Filter events after this time (ISO 8601)
+          schema:
+            type: string
+            format: date-time
+        - name: end_time
+          in: query
+          description: Filter events before this time (ISO 8601)
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: Events retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventsResponse'
+        '400':
+          description: Invalid query parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/patterns:
+    get:
+      tags:
+        - Patterns
+      summary: Get learned attack patterns
+      description: |
+        Returns summary of learned attack patterns including detection counts
+        and most common threat types.
+      operationId: getPatterns
+      parameters:
+        - name: limit
+          in: query
+          description: Maximum number of patterns to return
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: sort_by
+          in: query
+          description: Sort patterns by field
+          schema:
+            type: string
+            enum: [detection_count, last_seen, first_seen]
+            default: detection_count
+        - name: threat_type
+          in: query
+          description: Filter by threat type
+          schema:
+            type: string
+            enum: [prompt_injection, jailbreak, pii, financial_secret, toxic_content]
+      responses:
+        '200':
+          description: Patterns retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PatternsResponse'
+        '400':
+          description: Invalid query parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/config:
+    get:
+      tags:
+        - Dashboard
+      summary: Get configuration status
+      description: |
+        Returns non-sensitive configuration information for display in dashboard.
+        API keys and other secrets are never exposed.
+      operationId: getConfig
+      responses:
+        '200':
+          description: Configuration retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfigStatus'
+
+components:
+  schemas:
+    Statistics:
+      type: object
+      required:
+        - total_requests
+        - blocked_count
+        - allowed_count
+        - threat_breakdown
+        - time_range
+        - generated_at
+      properties:
+        total_requests:
+          type: integer
+          description: Total number of requests in time range
+        blocked_count:
+          type: integer
+          description: Number of requests blocked
+        allowed_count:
+          type: integer
+          description: Number of requests allowed
+        medium_confidence_warnings:
+          type: integer
+          description: Number of medium-confidence warnings logged
+        data_leak_alerts:
+          type: integer
+          description: Number of data leak alerts
+        threat_breakdown:
+          type: object
+          description: Count of each threat type detected
+          additionalProperties:
+            type: integer
+          example:
+            prompt_injection: 25
+            pii: 10
+            financial_secret: 4
+        detection_layer_breakdown:
+          type: object
+          description: Count by detection layer
+          properties:
+            ner:
+              type: integer
+            guard:
+              type: integer
+            embedding_match:
+              type: integer
+        time_range:
+          type: string
+          enum: [1h, 24h, 7d, 30d, all]
+        generated_at:
+          type: string
+          format: date-time
+
+    EventsResponse:
+      type: object
+      required:
+        - events
+        - pagination
+      properties:
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/SecurityEvent'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+
+    SecurityEvent:
+      type: object
+      required:
+        - id
+        - timestamp
+        - event_type
+        - request_id
+        - redacted_content
+        - severity_level
+      properties:
+        id:
+          type: string
+          format: uuid
+        timestamp:
+          type: string
+          format: date-time
+        event_type:
+          type: string
+          enum: [blocked, allowed, data_leak_alert, medium_confidence_warning]
+        threat_type:
+          type: string
+          enum: [prompt_injection, jailbreak, pii, financial_secret, toxic_content]
+          nullable: true
+        confidence_level:
+          type: number
+          minimum: 0
+          maximum: 1
+          nullable: true
+        request_id:
+          type: string
+          format: uuid
+        redacted_content:
+          type: string
+          description: Redacted snippet of prompt or response
+          maxLength: 1000
+        severity_level:
+          type: string
+          enum: [critical, high, medium, low, info]
+        detection_layer:
+          type: string
+          enum: [ner, guard, embedding_match]
+          nullable: true
+        learned_pattern_id:
+          type: string
+          format: uuid
+          nullable: true
+        provider:
+          type: string
+          nullable: true
+        model:
+          type: string
+          nullable: true
+
+    Pagination:
+      type: object
+      required:
+        - page
+        - per_page
+        - total
+        - total_pages
+      properties:
+        page:
+          type: integer
+          minimum: 1
+        per_page:
+          type: integer
+          minimum: 1
+          maximum: 100
+        total:
+          type: integer
+          description: Total number of events matching filters
+        total_pages:
+          type: integer
+          minimum: 1
+        has_next:
+          type: boolean
+        has_prev:
+          type: boolean
+
+    PatternsResponse:
+      type: object
+      required:
+        - patterns
+        - total
+      properties:
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttackPattern'
+        total:
+          type: integer
+          description: Total number of learned patterns
+
+    AttackPattern:
+      type: object
+      required:
+        - id
+        - threat_types
+        - detection_count
+        - first_seen
+        - last_seen
+        - redacted_text
+      properties:
+        id:
+          type: string
+          format: uuid
+        threat_types:
+          type: array
+          items:
+            type: string
+            enum: [prompt_injection, jailbreak, pii, financial_secret, toxic_content]
+          minItems: 1
+        detection_count:
+          type: integer
+          minimum: 1
+          description: Number of times pattern has matched
+        first_seen:
+          type: string
+          format: date-time
+        last_seen:
+          type: string
+          format: date-time
+        redacted_text:
+          type: string
+          description: Redacted example of attack pattern
+          maxLength: 500
+
+    ConfigStatus:
+      type: object
+      required:
+        - proxy_port
+        - dashboard_port
+        - log_retention_days
+        - model_device
+        - providers_configured
+        - sentry_enabled
+      properties:
+        proxy_port:
+          type: integer
+        dashboard_port:
+          type: integer
+        log_retention_days:
+          type: integer
+        model_device:
+          type: string
+          enum: [cpu, cuda, mps]
+        confidence_thresholds:
+          type: object
+          properties:
+            high:
+              type: number
+            medium_min:
+              type: number
+        disabled_checks:
+          type: array
+          items:
+            type: string
+            enum: [pii, financial_secret, prompt_injection, jailbreak, toxic_content]
+          description: Security checks currently disabled (warning if non-empty)
+        providers_configured:
+          type: array
+          items:
+            type: object
+            properties:
+              provider:
+                type: string
+              has_api_key:
+                type: boolean
+                description: Whether API key is configured (never exposes actual key)
+              is_default:
+                type: boolean
+        sentry_enabled:
+          type: boolean
+          description: Whether Sentry integration is active
+
+    ErrorResponse:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string
+        details:
+          type: string
+        code:
+          type: string

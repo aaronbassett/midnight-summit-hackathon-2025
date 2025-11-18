@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bandaid Security Proxy - Dashboard</title>
+    <link rel="stylesheet" href="/dashboard/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>🛡️ Bandaid Security Proxy</h1>
+            <p class="subtitle">Real-time LLM Security Monitoring</p>
+        </header>
+
+        <!-- Statistics Section -->
+        <section class="stats-section">
+            <h2>Overview</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="total-requests">-</div>
+                    <div class="stat-label">Total Requests</div>
+                </div>
+                <div class="stat-card stat-success">
+                    <div class="stat-value" id="allowed-count">-</div>
+                    <div class="stat-label">Allowed</div>
+                </div>
+                <div class="stat-card stat-danger">
+                    <div class="stat-value" id="blocked-count">-</div>
+                    <div class="stat-label">Blocked</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="block-rate">-%</div>
+                    <div class="stat-label">Block Rate</div>
+                </div>
+            </div>
+
+            <!-- Threat Breakdown -->
+            <div class="threat-breakdown">
+                <h3>Threat Breakdown</h3>
+                <div id="threat-breakdown-content" class="threat-list">
+                    <p class="loading">Loading threat data...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Events Section -->
+        <section class="events-section">
+            <div class="section-header">
+                <h2>Recent Security Events</h2>
+                <div class="refresh-status">
+                    <span id="refresh-status">Auto-refresh: ON</span>
+                    <span class="refresh-indicator" id="refresh-indicator">●</span>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters">
+                <select id="filter-event-type" class="filter-select">
+                    <option value="">All Event Types</option>
+                    <option value="blocked">Blocked</option>
+                    <option value="allowed">Allowed</option>
+                    <option value="medium_confidence_warning">Warnings</option>
+                    <option value="data_leak_alert">Data Leak Alerts</option>
+                </select>
+
+                <select id="filter-threat-type" class="filter-select">
+                    <option value="">All Threat Types</option>
+                    <option value="prompt_injection">Prompt Injection</option>
+                    <option value="jailbreak">Jailbreak</option>
+                    <option value="pii">PII</option>
+                    <option value="financial_secret">Financial Secret</option>
+                    <option value="toxic_content">Toxic Content</option>
+                </select>
+
+                <select id="filter-severity" class="filter-select">
+                    <option value="">All Severities</option>
+                    <option value="critical">Critical</option>
+                    <option value="high">High</option>
+                    <option value="medium">Medium</option>
+                    <option value="low">Low</option>
+                    <option value="info">Info</option>
+                </select>
+
+                <button id="apply-filters" class="btn-primary">Apply Filters</button>
+                <button id="clear-filters" class="btn-secondary">Clear</button>
+            </div>
+
+            <!-- Events Table -->
+            <div class="table-container">
+                <table class="events-table">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Event Type</th>
+                            <th>Threat Type</th>
+                            <th>Severity</th>
+                            <th>Confidence</th>
+                            <th>Detection Layer</th>
+                            <th>Content</th>
+                        </tr>
+                    </thead>
+                    <tbody id="events-table-body">
+                        <tr>
+                            <td colspan="7" class="loading">Loading events...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <button id="prev-page" class="btn-secondary" disabled>Previous</button>
+                <span id="page-info">Page 1</span>
+                <button id="next-page" class="btn-secondary">Next</button>
+            </div>
+        </section>
+
+        <!-- Patterns Section (User Story 3 - future) -->
+        <section class="patterns-section" style="display: none;">
+            <h2>Learned Attack Patterns</h2>
+            <div id="patterns-content">
+                <p class="loading">No learned patterns yet.</p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Bandaid Security Proxy v1.0.0 |
+                <a href="https://github.com/bandaid" target="_blank">Documentation</a> |
+                <a href="/health" target="_blank">Health Check</a>
+            </p>
+        </footer>
+    </div>
+
+    <script src="/dashboard/static/app.js"></script>
+</body>
+</html>

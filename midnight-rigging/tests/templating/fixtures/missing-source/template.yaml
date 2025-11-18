@@ -1,0 +1,6 @@
+name: Missing Source Template
+description: This template has valid YAML but no source directory
+
+requiredVariables:
+  - name: test
+    description: Test variable

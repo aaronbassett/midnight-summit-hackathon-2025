@@ -1,0 +1,111 @@
+name: NFT Contract
+description: Basic NFT smart contract with minting, transferring, and metadata functionality for pod network
+
+version: 1.0.0
+author: pod network
+license: MIT
+homepage: https://pod.network
+documentation: https://docs.v1.pod.network/
+repository: https://github.com/podnetwork/pod-sdk
+bugs: https://github.com/podnetwork/pod-sdk/issues
+keywords:
+  - nft
+  - solidity
+  - smart-contract
+  - pod-network
+  - rust
+  - blockchain
+
+longDescription: |
+  A complete NFT smart contract implementation for pod network with a Rust CLI.
+
+  This template creates a production-ready NFT project that includes:
+  - Solidity smart contract with minting, transferring, and metadata functionality
+  - requireQuorum integration for secure ownership verification
+  - Rust CLI application for contract interaction (mint, transfer, query)
+  - Event streaming with cryptographic verification
+  - Pod SDK integration for seamless network interaction
+
+  The contract follows pod network patterns and includes all necessary tooling
+  for deploying and interacting with NFTs on the pod network blockchain.
+
+useCases:
+  - Creating simple NFT collections on pod network
+  - Learning pod network smart contract development patterns
+  - Building CLI tools for NFT contract interaction
+  - Prototyping NFT projects with verified event streaming
+  - Integrating Pod SDK into Rust applications
+
+requiredVariables:
+  - name: contract_name
+    description: Name of the NFT contract (e.g., "MyNFTs", "ArtCollection")
+  - name: project_name
+    description: Cargo package name (lowercase with hyphens, e.g., "my-nfts")
+  - name: default_contract_address
+    description: Default contract address for CLI (Ethereum address format, e.g., "0x12296f2D128530a834460DF6c36a2895B793F26d")
+
+optionalVariables:
+  - name: default_rpc_url
+    description: Default RPC URL for connecting to pod network
+    default: 'ws://localhost:8545'
+  - name: author
+    description: Project author name for Cargo.toml
+    default: 'pod network Developer'
+
+exampleStructure:
+  - '{{contract_name}}.sol'
+  - 'Cargo.toml'
+  - 'src/main.rs'
+  - 'README.md'
+  - '.gitignore'
+
+structure:
+  overview: |
+    Creates a Rust workspace with an embedded Solidity NFT contract. The CLI
+    handles minting, transferring, querying token URIs, and watching verified
+    events emitted by the contract.
+
+    The project structure follows Rust and pod network conventions:
+    - Root level: Cargo.toml workspace with Pod SDK dependencies
+    - Solidity contract: Top-level .sol file using pod's requireQuorum
+    - Rust source: src/ directory with CLI and contract interaction logic
+    - Documentation: README.md with complete setup and usage instructions
+
+  keyFiles:
+    - path: '{{contract_name}}.sol'
+      purpose: |
+        Main NFT contract with mint, transfer, and tokenURI functions.
+        Uses Pod's requireQuorum for secure ownership verification.
+        Customize: Add burning functionality, supply limits, or access controls.
+
+    - path: 'src/main.rs'
+      purpose: |
+        CLI entry point with subcommands for mint, transfer, get-token-uri, and watch.
+        Uses clap for argument parsing and pod-sdk for contract interaction.
+        Customize: Add new commands (burn, batch mint), modify default values.
+
+    - path: 'Cargo.toml'
+      purpose: |
+        Rust project manifest with pod-sdk and pod-types dependencies.
+        Customize: Add additional crates for extended functionality.
+
+    - path: 'README.md'
+      purpose: |
+        Project documentation with setup instructions and usage examples.
+        Customize: Add project-specific deployment notes and examples.
+
+  commonCustomizations:
+    - 'Add burn() function to allow NFT destruction'
+    - 'Implement max supply limit in mint() function'
+    - 'Add access control for minting (whitelist, roles)'
+    - 'Extend CLI with batch minting capabilities'
+    - 'Add transfer approval mechanism'
+    - 'Implement token enumeration functions'
+
+  nextSteps:
+    - "Run 'cargo build' to compile the project"
+    - 'Deploy the contract to pod network and note the contract address'
+    - 'Update the default contract address in main.rs or pass via --contract-address'
+    - "Run 'cargo run -- mint <token_id> <uri>' to mint your first NFT"
+    - "Run 'cargo run -- watch' to stream verified Minted events"
+    - 'Check README.md for complete usage examples'

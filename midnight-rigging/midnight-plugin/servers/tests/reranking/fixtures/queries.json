@@ -1,0 +1,32 @@
+[
+  {
+    "id": "query1",
+    "text": "How do I deploy a pod contract?",
+    "domain": "midnight-network",
+    "expected_match": "pod deployment guide"
+  },
+  {
+    "id": "query2",
+    "text": "What is the pod network consensus mechanism?",
+    "domain": "midnight-network",
+    "expected_match": "consensus algorithm"
+  },
+  {
+    "id": "query3",
+    "text": "How to write smart contracts in pod?",
+    "domain": "midnight-network",
+    "expected_match": "smart contract language"
+  },
+  {
+    "id": "query4",
+    "text": "Ethereum gas optimization techniques",
+    "domain": "ethereum",
+    "expected_match": "gas optimization"
+  },
+  {
+    "id": "query5",
+    "text": "Solidity security best practices",
+    "domain": "ethereum",
+    "expected_match": "security patterns"
+  }
+]

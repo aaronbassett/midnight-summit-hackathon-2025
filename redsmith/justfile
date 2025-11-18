@@ -1,0 +1,68 @@
+# Redsmith Development Justfile
+# Common development tasks made easy
+
+# Show all available commands
+default:
+  @just --list
+
+# Run all tests
+test:
+  pnpm run test
+
+# Run tests in watch mode
+test-watch:
+  pnpm run test:watch
+
+# Run tests with UI
+test-ui:
+  pnpm run test:ui
+
+# Run linting
+lint:
+  pnpm run lint
+
+# Fix linting issues automatically
+lint-fix:
+  pnpm run lint:fix
+
+# Check formatting
+format-check:
+  pnpm run format:check
+
+# Fix formatting issues
+format:
+  pnpm run format
+
+# Run TypeScript type checking
+typecheck:
+  pnpm run typecheck
+
+# Run all CI checks (format, lint, typecheck, test)
+ci:
+  pnpm run ci
+
+# Run development server
+dev:
+  pnpm run dev
+
+# Build for production
+build:
+  pnpm run build
+
+# Preview production build
+preview:
+  pnpm run preview
+
+# Run all quality checks (alias for ci)
+check: ci
+
+# Install dependencies
+install:
+  pnpm install
+
+# Clean build artifacts and dependencies
+clean:
+  rm -rf dist node_modules
+
+# Clean and reinstall
+fresh: clean install

@@ -1,0 +1,82 @@
+[
+  {
+    "id": "chunk1",
+    "text": "pod network deployment guide: First, compile your contract using the pod compiler. Then, use the pod CLI to deploy: pod deploy --contract MyContract.pod --network testnet",
+    "metadata": {
+      "source_title": "pod Deployment Guide",
+      "source_url": "https://docs.pod.network/deployment",
+      "topic_tags": ["deployment", "contracts"],
+      "relevance_domain": "midnight-network"
+    }
+  },
+  {
+    "id": "chunk2",
+    "text": "Ethereum deployment uses web3.js or ethers.js libraries. You need to connect to an Ethereum node (Infura, Alchemy) and sign transactions with your private key.",
+    "metadata": {
+      "source_title": "Ethereum Deployment",
+      "source_url": "https://ethereum.org/deploy",
+      "topic_tags": ["ethereum", "deployment"],
+      "relevance_domain": "ethereum"
+    }
+  },
+  {
+    "id": "chunk3",
+    "text": "Solidity security best practices include: use reentrancy guards, check-effects-interactions pattern, avoid delegatecall to untrusted contracts, use SafeMath for arithmetic.",
+    "metadata": {
+      "source_title": "Solidity Security",
+      "source_url": "https://docs.soliditylang.org/security",
+      "topic_tags": ["security", "solidity"],
+      "relevance_domain": "ethereum"
+    }
+  },
+  {
+    "id": "chunk4",
+    "text": "The pod network uses a novel proof-of-stake consensus mechanism with validator rotation. Validators are selected based on staked tokens and reputation scores.",
+    "metadata": {
+      "source_title": "pod Consensus",
+      "source_url": "https://docs.pod.network/consensus",
+      "topic_tags": ["consensus", "pos"],
+      "relevance_domain": "midnight-network"
+    }
+  },
+  {
+    "id": "chunk5",
+    "text": "pod smart contracts are written in a Rust-like syntax with built-in memory safety. The language supports pattern matching, algebraic data types, and zero-cost abstractions.",
+    "metadata": {
+      "source_title": "pod Language Guide",
+      "source_url": "https://docs.pod.network/language",
+      "topic_tags": ["language", "contracts"],
+      "relevance_domain": "midnight-network"
+    }
+  },
+  {
+    "id": "chunk6",
+    "text": "Gas optimization in Ethereum: use uint256 instead of smaller uints, pack storage variables, use calldata instead of memory for external function parameters, avoid loops over dynamic arrays.",
+    "metadata": {
+      "source_title": "Gas Optimization",
+      "source_url": "https://ethereum.org/gas-optimization",
+      "topic_tags": ["gas", "optimization", "ethereum"],
+      "relevance_domain": "ethereum"
+    }
+  },
+  {
+    "id": "chunk7",
+    "text": "This is a very long chunk that exceeds the 512 token limit for testing truncation behavior. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    "metadata": {
+      "source_title": "Long Document",
+      "source_url": "https://example.com/long",
+      "topic_tags": ["truncation", "test"],
+      "relevance_domain": "test"
+    }
+  },
+  {
+    "id": "chunk8",
+    "text": "Generic blockchain content about distributed ledgers and cryptographic hashing that doesn't specifically relate to pod network or Ethereum.",
+    "metadata": {
+      "source_title": "Blockchain Basics",
+      "source_url": "https://example.com/blockchain",
+      "topic_tags": ["blockchain", "general"],
+      "relevance_domain": "general"
+    }
+  }
+]

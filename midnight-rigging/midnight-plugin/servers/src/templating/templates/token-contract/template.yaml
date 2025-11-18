@@ -1,0 +1,130 @@
+name: Token Contract
+description: Fungible token smart contract with transfer and balance functionality for pod network
+
+version: 1.0.0
+author: pod network
+license: MIT
+homepage: https://pod.network
+documentation: https://docs.v1.pod.network/
+repository: https://github.com/podnetwork/pod-sdk
+bugs: https://github.com/podnetwork/pod-sdk/issues
+keywords:
+  - token
+  - erc-20
+  - fungible
+  - solidity
+  - smart-contract
+  - pod-network
+  - rust
+  - foundry
+  - blockchain
+
+longDescription: |
+  A complete fungible token smart contract implementation for pod network with Rust CLI and Foundry tooling.
+
+  This template creates a production-ready token project that includes:
+  - Solidity smart contract with ERC-20-like interface (balanceOf, transfer)
+  - requireQuorum integration for secure balance verification
+  - Rust CLI application for contract interaction (balance queries, transfers, event watching)
+  - Foundry configuration for contract compilation and testing
+  - Event streaming with cryptographic verification
+  - Pod SDK integration for seamless network interaction
+
+  The contract follows standard token patterns and includes all necessary tooling
+  for deploying and interacting with fungible tokens on the pod network blockchain.
+
+useCases:
+  - Creating fungible token contracts on pod network
+  - Learning pod network smart contract development with Foundry
+  - Building CLI tools for token contract interaction
+  - Prototyping token projects with verified event streaming
+  - Integrating Pod SDK with Foundry-based projects
+
+requiredVariables:
+  - name: contract_name
+    description: Name of the token contract (e.g., "MyToken", "GameToken")
+  - name: project_name
+    description: Cargo package name (lowercase with hyphens, e.g., "my-token")
+  - name: token_name
+    description: Human-readable token name for deployment (e.g., "My Token", "Game Coin")
+  - name: token_symbol
+    description: Token symbol for deployment (3-5 uppercase letters, e.g., "MTK", "GAME")
+  - name: initial_supply
+    description: Initial token supply for deployment (e.g., "1000000")
+  - name: default_contract_address
+    description: Default contract address for CLI (Ethereum address format)
+
+optionalVariables:
+  - name: default_rpc_url
+    description: Default RPC URL for connecting to pod network
+    default: 'ws://localhost:8545'
+  - name: author
+    description: Project author name for Cargo.toml
+    default: 'pod network Developer'
+
+exampleStructure:
+  - 'contracts/{{contract_name}}.sol'
+  - 'foundry.toml'
+  - 'Cargo.toml'
+  - 'src/main.rs'
+  - 'README.md'
+  - '.gitignore'
+
+structure:
+  overview: |
+    Creates a hybrid Rust/Foundry workspace with a Solidity token contract. The CLI
+    handles balance queries, token transfers, and watching verified Transfer events
+    emitted by the contract.
+
+    The project structure combines Rust and Foundry conventions:
+    - Root level: Cargo.toml for Rust workspace, foundry.toml for Solidity config
+    - Solidity contracts: contracts/ directory with .sol files using pod's requireQuorum
+    - Rust source: src/ directory with CLI and contract interaction logic
+    - Foundry artifacts: lib/ for dependencies, out/ for compiled contracts
+    - Documentation: README.md with complete setup and usage instructions
+
+  keyFiles:
+    - path: 'contracts/{{contract_name}}.sol'
+      purpose: |
+        Main token contract with constructor parameters, balanceOf, and transfer functions.
+        Uses pod's requireQuorum for secure balance verification on transfers.
+        Customize: Add approval mechanisms, minting/burning, or additional token features.
+
+    - path: 'src/main.rs'
+      purpose: |
+        CLI entry point with subcommands for get-balance, transfer-token, and watch.
+        Uses clap for argument parsing and pod-sdk for contract interaction.
+        Customize: Add new commands (approve, mint, burn), modify default values.
+
+    - path: 'foundry.toml'
+      purpose: |
+        Foundry configuration for Solidity compilation and testing.
+        Customize: Adjust Solidity compiler version, add test configurations, modify paths.
+
+    - path: 'Cargo.toml'
+      purpose: |
+        Rust project manifest with pod-sdk and pod-types dependencies.
+        Customize: Add additional crates for extended functionality.
+
+    - path: 'README.md'
+      purpose: |
+        Project documentation with setup instructions including Foundry installation.
+        Customize: Add project-specific deployment notes and token economics details.
+
+  commonCustomizations:
+    - 'Add approve() and transferFrom() for ERC-20 compatibility'
+    - 'Implement mint() and burn() functions for supply management'
+    - 'Add access control for privileged operations (owner, minter roles)'
+    - 'Extend CLI with approval and allowance commands'
+    - 'Add token metadata functions (decimals, totalSupply view)'
+    - 'Implement Foundry tests in test/ directory'
+
+  nextSteps:
+    - "Run 'forge install podnetwork/pod-sdk' to install Solidity dependencies"
+    - "Run 'forge build' to compile the Solidity contract"
+    - 'Deploy the contract with constructor parameters (tokenName, tokenSymbol, initialSupply)'
+    - 'Update the default contract address in main.rs or pass via --contract-address'
+    - "Run 'cargo build' to compile the Rust CLI"
+    - "Run 'cargo run -- get-balance <address>' to query token balances"
+    - "Run 'cargo run -- watch' to stream verified Transfer events"
+    - 'Check README.md for complete usage examples'

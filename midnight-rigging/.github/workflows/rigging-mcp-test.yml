@@ -1,0 +1,53 @@
+name: rigging-mcp Tests
+
+on:
+  pull_request:
+    paths:
+      - 'rigging-mcp/**'
+      - '.github/workflows/rigging-mcp-test.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'rigging-mcp/**'
+      - '.github/workflows/rigging-mcp-test.yml'
+
+jobs:
+  test:
+    name: Test rigging-mcp
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [24.x]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: rigging-mcp/package-lock.json
+
+      - name: Install dependencies
+        working-directory: rigging-mcp
+        run: npm ci
+
+      - name: Type check
+        working-directory: rigging-mcp
+        run: npm run type-check
+
+      - name: Build
+        working-directory: rigging-mcp
+        run: npm run build
+
+      - name: Run tests
+        working-directory: rigging-mcp
+        run: npm test
+
+      - name: Format check
+        working-directory: rigging-mcp
+        run: npm run format:check

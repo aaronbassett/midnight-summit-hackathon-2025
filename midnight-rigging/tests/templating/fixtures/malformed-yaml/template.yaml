@@ -1,0 +1,6 @@
+name: "Malformed Template
+description: This template has invalid YAML syntax (unclosed quote above)
+
+requiredVariables:
+  - name: test
+    description: Test variable

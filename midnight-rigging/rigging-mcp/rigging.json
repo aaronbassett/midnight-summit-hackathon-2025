@@ -1,0 +1,14 @@
+{
+  "sources": [
+    {
+      "namespace": "test",
+      "description": "Test fixtures for validation",
+      "skills": "./tests/fixtures/skills",
+      "agents": "./tests/fixtures/agents"
+    }
+  ],
+  "server": {
+    "port": 3001,
+    "host": "localhost"
+  }
+}

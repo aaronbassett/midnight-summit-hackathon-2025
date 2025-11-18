@@ -1,0 +1,37 @@
+name: Simple Test Template
+description: A minimal test template for unit testing
+
+version: 1.0.0
+author: Test Author
+license: MIT
+
+requiredVariables:
+  - name: project_name
+    description: Name of the project (e.g., "my-project")
+  - name: description
+    description: Project description
+
+optionalVariables:
+  - name: author
+    description: Project author name
+    default: 'Test User'
+
+exampleStructure:
+  - 'README.md'
+  - '{{project_name}}.txt'
+
+structure:
+  overview: |
+    Creates a simple project with a README and a text file.
+
+  keyFiles:
+    - path: 'README.md'
+      purpose: 'Project documentation'
+    - path: '{{project_name}}.txt'
+      purpose: 'Main project file'
+
+  commonCustomizations:
+    - 'Update README with project details'
+
+  nextSteps:
+    - 'Review the generated files'

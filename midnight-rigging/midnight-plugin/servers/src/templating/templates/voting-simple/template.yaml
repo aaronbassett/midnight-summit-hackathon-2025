@@ -1,0 +1,87 @@
+name: Voting (Simple)
+description: Simple voting contract with AddressSet and SharedCounter for pod network
+
+version: 1.0.0
+author: pod network
+license: MIT
+homepage: https://pod.network
+documentation: https://docs.v1.pod.network/
+repository: https://github.com/podnetwork/pod-sdk
+bugs: https://github.com/podnetwork/pod-sdk/issues
+keywords:
+  - voting
+  - governance
+  - dao
+  - proposal
+  - solidity
+  - smart-contract
+  - pod-network
+  - fasttypes
+
+longDescription: |
+  A simple voting contract for pod network using AddressSet and SharedCounter.
+
+  This template creates a standalone voting contract that includes:
+  - AddressSet for tracking voters
+  - SharedCounter for vote tallies
+  - Time-based voting periods with pod time utilities
+  - Idempotent voting logic (prevents double voting)
+  - Finalization with results
+
+  Perfect for DAO governance, proposals, community decisions, and polls.
+
+useCases:
+  - DAO governance and proposal voting
+  - Community decisions
+  - Polls and surveys
+  - Time-bounded participation
+
+requiredVariables:
+  - name: contract_name
+    description: Name of the contract class (e.g., "ProposalVote", "DAOVoting")
+  - name: proposal_description
+    description: Proposal description (e.g., "Should we upgrade the protocol?")
+  - name: voting_duration
+    description: Voting duration in seconds (e.g., "604800" for 7 days)
+
+optionalVariables:
+  - name: license
+    description: SPDX license identifier
+    default: 'MIT'
+
+exampleStructure:
+  - '{{contract_name}}.sol'
+
+structure:
+  overview: |
+    Creates a standalone voting contract using AddressSet and SharedCounter.
+
+    The contract includes:
+    - AddressSet for voter registration
+    - SharedCounter for yes/no vote tallies
+    - Time utilities (requireTimeAfter/Before) for voting period
+    - Idempotent voting logic
+    - Finalization function for determining results
+
+    Uses pod SDK FastTypes and time utilities for correct behavior.
+
+  keyFiles:
+    - path: '{{contract_name}}.sol'
+      purpose: |
+        Main voting contract with AddressSet and SharedCounter.
+        Includes vote casting, finalization, and result queries.
+        Customize: Add weighted voting, multiple choice, or quorum requirements.
+
+  commonCustomizations:
+    - 'Add weighted voting with token balance'
+    - 'Implement multiple choice voting'
+    - 'Add quorum requirements'
+    - 'Implement token-gated voting'
+    - 'Add delegation support'
+
+  nextSteps:
+    - "Run 'forge install podnetwork/pod-sdk' to install dependencies"
+    - 'Compile the contract with your Solidity compiler'
+    - 'Deploy with constructor parameters (description, duration)'
+    - 'Users call vote(bool support) during voting period'
+    - 'Call finalize() after voting ends to determine result'

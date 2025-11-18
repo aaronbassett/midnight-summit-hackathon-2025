@@ -1,0 +1,61 @@
+{
+  "name": "@midnight-plugin/servers",
+  "version": "2.0.0",
+  "description": "MCP servers for midnight network Claude Code plugin",
+  "type": "module",
+  "engines": {
+    "node": ">=24.11.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev:rag": "tsx src/rag/index.ts",
+    "dev:templating": "tsx src/templating/index.ts",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "test": "node --test tests/reranking/*.test.ts && node --test ../../tests/templating/*.test.ts && vitest run",
+    "test:reranker": "node --test tests/reranking/reranker.test.ts",
+    "test:queue": "node --test tests/reranking/queue.test.ts",
+    "test:integration": "node --test tests/reranking/integration.test.ts",
+    "test:watch": "node --test --watch tests/reranking/*.test.ts",
+    "test:midnight-network": "vitest run tests/midnight-network",
+    "test:midnight-network:watch": "vitest watch tests/midnight-network",
+    "test:templating": "node --test ../../tests/templating/*.test.ts",
+    "test:templating:watch": "node --test --watch ../../tests/templating/*.test.ts"
+  },
+  "files": [
+    "dist/**/*",
+    "!dist/**/*.test.js",
+    "!dist/**/*.test.d.ts"
+  ],
+  "dependencies": {
+    "@logtape/logtape": "^1.1.2",
+    "@modelcontextprotocol/sdk": "^1.21.1",
+    "@xenova/transformers": "^2.17.2",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "handlebars": "^4.7.8",
+    "isbinaryfile": "^5.0.0",
+    "js-yaml": "^4.1.0",
+    "lru-cache": "^11.2.2",
+    "p-queue": "^8.0.1",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^24.0.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.8"
+  },
+  "keywords": [
+    "midnight",
+    "midnight-network",
+    "blockchain",
+    "zero-knowledge",
+    "compact",
+    "mcp",
+    "servers"
+  ],
+  "author": "midnight network",
+  "license": "MIT"
+}

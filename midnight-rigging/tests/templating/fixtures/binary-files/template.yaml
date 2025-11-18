@@ -1,0 +1,11 @@
+name: Binary Files Test Template
+description: Template with both binary and text files to test file type handling
+
+requiredVariables:
+  - name: project_name
+    description: Name of the project
+
+exampleStructure:
+  - 'logo.png'
+  - 'data.bin'
+  - 'README.md'

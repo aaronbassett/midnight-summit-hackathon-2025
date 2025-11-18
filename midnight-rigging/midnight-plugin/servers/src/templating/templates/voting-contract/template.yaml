@@ -1,0 +1,161 @@
+name: Voting Contract
+description: On-chain voting smart contract with proposal creation, voting, and execution for pod network
+
+version: 1.0.0
+author: pod network
+license: MIT
+homepage: https://pod.network
+documentation: https://docs.v1.pod.network/
+repository: https://github.com/podnetwork/pod-sdk
+bugs: https://github.com/podnetwork/pod-sdk/issues
+keywords:
+  - voting
+  - governance
+  - proposal
+  - dao
+  - solidity
+  - smart-contract
+  - pod-network
+  - rust
+  - foundry
+  - blockchain
+
+longDescription: |
+  A complete on-chain voting system implementation for pod network with Rust CLI, Foundry testing, and auto-generated bindings.
+
+  This template creates a production-ready voting project that includes:
+  - Solidity voting contract with proposal creation, casting votes, and execution
+  - Time-based proposal deadlines using pod's Time.sol library
+  - Fast counters and owned counters for efficient vote tracking
+  - Voter registration and state management
+  - Threshold-based proposal execution
+  - Comprehensive Foundry test suite with PodTest integration
+  - Rust bindings auto-generated with forge bind
+  - Rust CLI application for creating proposals, voting, and watching events
+  - Real-time event streaming with cryptographic verification
+  - Makefile for streamlined binding generation workflow
+
+  The contract uses pod network's advanced features including requireTimeBefore/After
+  for deadline enforcement and FastTypes for gas-optimized counter operations.
+
+useCases:
+  - Building DAO governance systems on pod network
+  - Creating on-chain voting mechanisms with deadlines
+  - Learning pod network's Time and FastTypes features
+  - Developing proposal-based decision systems
+  - Prototyping governance infrastructure with verified events
+  - Integrating Foundry testing with Pod SDK
+
+requiredVariables:
+  - name: contract_name
+    description: Name of the voting contract (e.g., "Voting", "Governance")
+  - name: bindings_crate_name
+    description: Name for the Rust bindings crate (lowercase with hyphens, e.g., "voting-bindings")
+  - name: client_crate_name
+    description: Name for the Rust CLI client crate (lowercase with hyphens, e.g., "voting-client")
+
+optionalVariables:
+  - name: default_rpc_url
+    description: Default RPC URL for connecting to pod network
+    default: 'ws://localhost:8545'
+  - name: author
+    description: Project author name for Cargo.toml files
+    default: 'pod network Developer'
+
+exampleStructure:
+  - 'contract/src/{{contract_name}}.sol'
+  - 'contract/test/{{contract_name}}.t.sol'
+  - 'contract/script/{{contract_name}}.s.sol'
+  - 'contract/foundry.toml'
+  - 'contract/Makefile'
+  - 'bindings/Cargo.toml'
+  - 'client/src/main.rs'
+  - 'client/Cargo.toml'
+  - 'Cargo.toml'
+  - 'README.md'
+  - '.gitignore'
+
+structure:
+  overview: |
+    Creates a multi-crate Rust workspace with a Foundry Solidity project. The structure
+    separates concerns into three main components:
+
+    1. contract/ - Foundry project with Voting.sol, tests, and deployment scripts
+    2. bindings/ - Auto-generated Rust bindings from the Solidity contract using forge bind
+    3. client/ - Rust CLI that uses the bindings to interact with the deployed contract
+
+    The workflow is: forge build → make generate (bindings) → cargo build (client)
+
+    The project structure follows Rust workspace and Foundry conventions:
+    - contract/: Full Foundry project with src/, test/, script/
+    - bindings/: Rust crate with auto-generated contract bindings
+    - client/: Rust CLI application with proposal and voting commands
+    - Root README: Complete setup and usage instructions
+
+  keyFiles:
+    - path: 'contract/src/{{contract_name}}.sol'
+      purpose: |
+        Main voting contract with proposal creation, voting, and execution logic.
+        Uses pod's Time library for deadlines and FastTypes for efficient counters.
+        Customize: Add vote delegation, multi-choice voting, or custom execution logic.
+
+    - path: 'contract/test/{{contract_name}}.t.sol'
+      purpose: |
+        Comprehensive Foundry test suite using PodTest for time manipulation.
+        Tests all voting scenarios including edge cases and access control.
+        Customize: Add tests for custom features or gas optimization checks.
+
+    - path: 'contract/script/{{contract_name}}.s.sol'
+      purpose: |
+        Foundry deployment script for deploying the voting contract.
+        Customize: Add initialization parameters or multi-contract deployments.
+
+    - path: 'contract/Makefile'
+      purpose: |
+        Automates Rust binding generation using forge bind command.
+        Run 'make generate' to create/update bindings from compiled contracts.
+        Customize: Adjust binding options or add deployment commands.
+
+    - path: 'bindings/Cargo.toml'
+      purpose: |
+        Rust crate manifest for auto-generated contract bindings.
+        The src/ directory is populated by 'make generate' in contract/.
+        Customize: Update alloy version if needed.
+
+    - path: 'client/src/main.rs'
+      purpose: |
+        Rust CLI with create, vote, and watch subcommands.
+        Handles proposal creation, vote casting, event streaming, and execution.
+        Customize: Add commands for querying proposals, batch operations, or analytics.
+
+    - path: 'client/Cargo.toml'
+      purpose: |
+        Rust CLI application manifest depending on bindings and pod-sdk.
+        Customize: Add additional crates for extended functionality.
+
+    - path: 'README.md'
+      purpose: |
+        Complete project documentation with multi-step setup workflow.
+        Documents Foundry installation, binding generation, and CLI usage.
+        Customize: Add deployment guides and governance parameter explanations.
+
+  commonCustomizations:
+    - 'Add vote delegation allowing voters to assign voting power'
+    - 'Implement weighted voting based on token holdings'
+    - 'Extend to multi-choice voting instead of binary yes/no'
+    - 'Add proposal cancellation by proposer before deadline'
+    - 'Implement quorum requirements in addition to thresholds'
+    - 'Add vote visibility controls (hidden votes until deadline)'
+    - 'Extend CLI with proposal querying and analytics'
+    - 'Add snapshot-based voting power calculation'
+
+  nextSteps:
+    - "Run 'forge install podnetwork/pod-sdk' in contract/ to install Solidity dependencies"
+    - "Run 'forge build' in contract/ to compile the Solidity contracts"
+    - "Run 'forge test' in contract/ to verify tests pass"
+    - "Run 'make generate' in contract/ to create Rust bindings"
+    - 'Deploy the contract and note the contract address'
+    - "Run 'cargo build' in client/ to compile the CLI"
+    - "Use 'cargo run -- create' to create a test proposal"
+    - "Use 'cargo run -- vote' to cast votes"
+    - 'Check README.md for complete usage examples and workflow'

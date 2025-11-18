@@ -1,0 +1,42 @@
+# fly.toml app configuration file generated for midnight-rag-mcp on 2025-11-17T16:12:04Z
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'midnight-rag-mcp'
+primary_region = 'iad'
+
+[build]
+
+[env]
+  CACHE_MAX_SIZE_MB = '100'
+  CACHE_TTL_SECONDS = '300'
+  CHROMA_DATABASE = 'midnight-rag'
+  MAX_IDS_PER_REQUEST = '1000'
+  MAX_QUERY_LENGTH = '10000'
+  MAX_RESULTS_PER_QUERY = '100'
+  NODE_ENV = 'production'
+  PORT = '8080'
+  RATE_LIMIT_MAX_REQUESTS = '100'
+  RATE_LIMIT_QUERY_PER_MINUTE = '20'
+  RATE_LIMIT_WINDOW_MS = '900000'
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+  [[http_service.checks]]
+    interval = '30s'
+    timeout = '5s'
+    grace_period = '10s'
+    method = 'GET'
+    path = '/health'
+
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1

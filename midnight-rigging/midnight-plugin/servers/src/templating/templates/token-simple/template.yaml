@@ -1,0 +1,90 @@
+name: Token (Simple)
+description: ERC20-style fungible token contract using Balance FastType for pod network
+
+version: 1.0.0
+author: pod network
+license: MIT
+homepage: https://pod.network
+documentation: https://docs.v1.pod.network/
+repository: https://github.com/podnetwork/pod-sdk
+bugs: https://github.com/podnetwork/pod-sdk/issues
+keywords:
+  - token
+  - erc-20
+  - fungible
+  - balance
+  - solidity
+  - smart-contract
+  - pod-network
+  - fasttypes
+
+longDescription: |
+  An ERC20-style fungible token contract for pod network using Balance FastType for safe transfers.
+
+  This template creates a standalone token contract that includes:
+  - Balance FastType for order-independent balance management
+  - SharedCounter for total supply tracking
+  - Transfer, mint, and burn functions
+  - Allowance system for approved spenders
+  - Supply cap support (optional)
+
+  The contract follows ERC20 patterns and uses pod network FastTypes to ensure
+  correct behavior in the coordination-free execution model.
+
+useCases:
+  - Creating fungible tokens (currencies, points, credits)
+  - Need ERC20-compatible interface
+  - Want safe balance management with order-independent execution
+
+requiredVariables:
+  - name: contract_name
+    description: Name of the contract class (e.g., "MyToken", "GameToken")
+  - name: token_name
+    description: Human-readable token name (e.g., "My Token", "Game Coin")
+  - name: token_symbol
+    description: Token symbol (3-5 uppercase letters, e.g., "MTK", "GAME")
+  - name: decimals
+    description: Number of decimal places (usually 18)
+  - name: max_supply
+    description: Maximum token supply (0 for unlimited)
+
+optionalVariables:
+  - name: license
+    description: SPDX license identifier
+    default: 'MIT'
+
+exampleStructure:
+  - '{{contract_name}}.sol'
+
+structure:
+  overview: |
+    Creates a standalone ERC20-style token contract using Balance FastType.
+
+    The contract includes:
+    - Balance FastType for safe, order-independent transfers
+    - SharedCounter for total supply
+    - Mint, burn, transfer, and approval functions
+    - Supply cap enforcement (if max_supply > 0)
+
+    Uses pod SDK FastTypes to ensure correct behavior regardless of transaction order.
+
+  keyFiles:
+    - path: '{{contract_name}}.sol'
+      purpose: |
+        Main token contract with Balance FastType for balances and SharedCounter for supply.
+        Includes transfer, mint, burn, and allowance functions.
+        Customize: Add transfer fees, pausable functionality, or time-locked minting.
+
+  commonCustomizations:
+    - 'Add transfer fees (percentage of transfer amount)'
+    - 'Implement pausable functionality for emergency stops'
+    - 'Add time-locked minting with requireTimeBefore'
+    - 'Implement role-based access control for minting'
+    - 'Add snapshot functionality for governance'
+
+  nextSteps:
+    - "Run 'forge install podnetwork/pod-sdk' to install dependencies"
+    - 'Compile the contract with your Solidity compiler'
+    - 'Deploy with constructor parameters (name, symbol, decimals, maxSupply)'
+    - 'Call mint() to create initial token supply'
+    - 'Test transfers to verify Balance FastType behavior'

@@ -1,0 +1,143 @@
+name: Release PR Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: read
+  id-token: write
+
+jobs:
+  # Only run on release-please PRs
+  check-release-pr:
+    runs-on: ubuntu-latest
+    outputs:
+      is-release-pr: ${{ steps.check.outputs.is-release-pr }}
+    steps:
+      - name: Check if PR is from release-please
+        id: check
+        run: |
+          if [[ "${{ github.event.pull_request.user.login }}" == "github-actions[bot]" ]] && \
+             [[ "${{ github.event.pull_request.title }}" == chore* ]] && \
+             [[ "${{ github.event.pull_request.head.ref }}" == release-please--* ]]; then
+            echo "is-release-pr=true" >> "$GITHUB_OUTPUT"
+            echo "This is a release-please PR"
+          else
+            echo "is-release-pr=false" >> "$GITHUB_OUTPUT"
+            echo "Not a release-please PR, skipping"
+          fi
+
+  claude-review:
+    needs: check-release-pr
+    if: needs.check-release-pr.outputs.is-release-pr == 'true'
+    runs-on: ubuntu-latest
+    outputs:
+      should-merge: ${{ steps.review.outputs.should-merge }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Claude Code Review
+        id: review
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: |
+            REPO: ${{ github.repository }}
+            PR NUMBER: ${{ github.event.pull_request.number }}
+
+            This is an automated release PR created by release-please. Please review it carefully:
+
+            1. **Version Bumps**: Verify all version numbers are consistent and follow semver
+            2. **CHANGELOG**: Check that the changelog entries accurately reflect the changes
+            3. **Breaking Changes**: Identify any breaking changes and verify they're properly documented
+            4. **Package Integrity**: Ensure package.json files are properly updated
+            5. **Release Notes**: Verify release notes are clear and complete
+
+            **Decision Making**:
+            - If everything looks good and this is a safe release:
+              * Create a file `claude-decision.txt` with content "MERGE"
+              * Post a positive review comment with `gh pr comment`
+            - If you find issues that need human review:
+              * Create a file `claude-decision.txt` with content "REQUEST_REVIEW"
+              * Post a detailed comment explaining the concerns with `gh pr comment`
+
+            Use `gh pr view` and `gh pr diff` to examine the PR details.
+
+            After your review, make sure to create the decision file and post your comment.
+
+          claude_args: '--allowed-tools "Bash(gh pr view:*),Bash(gh pr diff:*),Bash(gh pr comment:*)"'
+
+      - name: Parse Claude decision
+        id: parse
+        run: |
+          # Check decision file created by Claude
+          if [ -f claude-decision.txt ]; then
+            DECISION=$(cat claude-decision.txt | tr -d '[:space:]')
+            if [ "$DECISION" = "MERGE" ]; then
+              echo "should-merge=true" >> "$GITHUB_OUTPUT"
+              echo "✅ Claude approved the release PR for auto-merge"
+            else
+              echo "should-merge=false" >> "$GITHUB_OUTPUT"
+              echo "⚠️  Claude requested manual review"
+            fi
+          else
+            # Default to manual review if decision file missing
+            echo "should-merge=false" >> "$GITHUB_OUTPUT"
+            echo "⚠️  No decision file found, defaulting to manual review"
+          fi
+
+  auto-merge:
+    needs: [check-release-pr, claude-review]
+    if: needs.claude-review.outputs.should-merge == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Approve PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr review ${{ github.event.pull_request.number }} \
+            --repo ${{ github.repository }} \
+            --approve \
+            --body "✅ Automated approval: Claude Code review passed all checks. Release appears safe to merge."
+
+      - name: Enable auto-merge
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr merge ${{ github.event.pull_request.number }} \
+            --repo ${{ github.repository }} \
+            --squash \
+            --auto \
+            --body "🤖 Auto-merged by Claude Code after successful release review"
+
+  request-review:
+    needs: [check-release-pr, claude-review]
+    if: needs.claude-review.outputs.should-merge == 'false'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Request manual review
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr comment ${{ github.event.pull_request.number }} \
+            --repo ${{ github.repository }} \
+            --body "⚠️ **Manual review requested**
+
+Claude Code has reviewed this release PR and identified concerns that require human oversight.
+
+Please review Claude's detailed feedback above before merging.
+
+cc: @${{ github.repository_owner }}"
+
+          # Add label to highlight review needed
+          gh pr edit ${{ github.event.pull_request.number }} \
+            --repo ${{ github.repository }} \
+            --add-label "needs-manual-review"

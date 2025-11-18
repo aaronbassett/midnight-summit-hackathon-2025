@@ -1,0 +1,35 @@
+# Node modules (will be installed in container)
+node_modules/
+
+# Source files (only ship dist)
+src/
+
+# Tests
+tests/
+
+# Development files
+tsconfig.json
+.prettierrc
+.prettierignore
+.gitignore
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor directories
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment files
+.env
+.env.*
+
+# Build artifacts (will be copied separately)
+dist/

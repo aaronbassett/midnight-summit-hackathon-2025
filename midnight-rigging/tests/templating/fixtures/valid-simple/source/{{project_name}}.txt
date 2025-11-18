@@ -1,0 +1,7 @@
+Project: {{project_name}}
+Description: {{description}}
+Author: {{author}}
+
+This file was created in: {{TARGET_DIR}}
+Target name: {{TARGET_NAME}}
+Template: {{TEMPLATE_NAME}} v{{TEMPLATE_VERSION}}

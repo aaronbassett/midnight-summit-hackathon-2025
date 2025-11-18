@@ -1,0 +1,108 @@
+# pod network Development Terminology Synonyms
+# Format: term:synonym1,synonym2,synonym3
+#
+# Usage: Each line contains a term followed by colon, then CSV list of synonyms
+# Lookups are case-insensitive
+# Lines starting with # are comments
+
+# pod Network Core Terms
+pod:pod network,pod blockchain,pod chain,pod platform
+pod network:pod,pod blockchain,pod ecosystem,pod chain
+contract:pod contract,smart contract,on-chain code,pod code
+pod contract:contract,smart contract,on-chain code,pod code,pod program
+
+# pod Contract Development
+deploy:deployment,deploying,publish,deploy contract,contract deployment
+deployment:deploy,publish,deploying,migration
+compile:compilation,build,compiler,compiling contract
+compilation:compile,build,compiling
+function:method,contract method,callable function,pod function
+call:invoke,execute,transaction,call function,contract call,function call
+invoke:call,execute,send transaction,call method
+error:contract error,runtime error,execution error,error handling
+debug:debugging,troubleshoot,debug contract,contract debugging
+test:testing,unit test,contract test,test contract
+
+# pod APIs and RPC
+RPC:remote procedure call,API call,RPC method,RPC endpoint,pod RPC
+API:application programming interface,RPC,pod API,API endpoint,interface
+query:RPC call,API call,state query,query state,read state
+read:query,read state,get data,fetch data,read contract
+state:blockchain state,contract state,on-chain state,state data
+balance:account balance,wallet balance,address balance,token balance
+transaction:tx,pod transaction,on-chain transaction,txn,blockchain transaction
+block:blockchain block,block number,block height,block data
+
+# pod Indexer
+indexer:pod indexer,blockchain indexer,data indexer,query service
+pod indexer:indexer,blockchain indexer,query API,indexer service
+search:query,find,lookup,search indexer,indexer query
+filter:search filter,query filter,filter data,filtered query
+pagination:paging,page results,limit offset,paginated results
+sort:sorting,order,order results,sort data
+
+# pod Language and Syntax
+syntax:pod syntax,language syntax,contract syntax,code syntax
+keyword:language keyword,reserved word,pod keyword,syntax keyword
+type:data type,pod type,variable type,type definition
+variable:var,local variable,state variable,contract variable
+storage:state storage,persistent storage,contract storage,on-chain storage
+parameter:argument,function parameter,input parameter,function argument
+return:return value,function return,output,result
+expression:code expression,statement,logic expression
+
+# pod Tooling and Development
+compiler:pod compiler,build tool,compilation tool
+debugger:debugging tool,debug utility,contract debugger
+explorer:blockchain explorer,pod explorer,block explorer,transaction explorer
+pod explorer:explorer,block explorer,transaction viewer,blockchain browser
+wallet:pod wallet,crypto wallet,account,user wallet
+CLI:command line,command line interface,pod CLI,CLI tool
+SDK:software development kit,pod SDK,development kit,developer tools
+
+# Documentation and Learning
+documentation:docs,pod docs,developer docs,API docs,reference docs
+guide:tutorial,how-to,walkthrough,developer guide,getting started
+example:code example,sample code,demo,example code,sample contract
+tutorial:guide,walkthrough,learning path,step-by-step guide
+reference:API reference,documentation,reference guide,technical reference
+best practice:best practices,recommended approach,pod standards,development standards
+
+# Data and State Management
+data:state data,contract data,on-chain data,blockchain data
+read data:query state,get data,fetch state,read state,state query
+write data:update state,modify state,change state,state update
+event:blockchain event,contract event,event log,emitted event,event emission
+log:event log,blockchain log,contract log,transaction log
+emit:fire event,trigger event,log event,emit event,event emission
+
+# Blockchain Concepts
+blockchain:distributed ledger,pod blockchain,chain,blockchain network
+decentralized:distributed,peer-to-peer,P2P,decentralized network
+consensus:consensus mechanism,network consensus,blockchain consensus
+node:network node,blockchain node,validator,pod node
+network:blockchain network,pod network,distributed network,peer network
+address:wallet address,account address,public address,blockchain address
+account:wallet,user account,blockchain account,address
+
+# Performance and Optimization
+performance:efficiency,speed,execution speed,contract performance
+optimization:optimize,performance tuning,code optimization,efficiency improvement
+scalability:scale,scaling,network scalability,throughput
+latency:response time,delay,network latency,query latency
+throughput:transactions per second,TPS,network throughput,processing speed
+
+# Development Operations
+develop:development,build,create,contract development,pod development
+build:compile,build contract,compilation,building
+create:make,develop,implement,write,create contract
+implement:implementation,develop,build,create,coding
+write:code,develop,implement,write contract,write code
+
+# Common Actions
+get:fetch,retrieve,read,query,get data
+fetch:get,retrieve,read,fetch data,pull data
+set:update,write,modify,change,set data
+update:modify,change,set,update data,write data
+send:transfer,transmit,dispatch,send transaction
+receive:get,accept,receive data,receive transaction

@@ -1,0 +1,83 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [24.x]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+
+      - name: Install root dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install servers dependencies
+        run: |
+          cd pod-plugin/servers
+          pnpm install --frozen-lockfile
+
+      - name: Build servers
+        run: |
+          cd pod-plugin/servers
+          pnpm build
+
+      - name: Run linting
+        run: pnpm run lint
+
+      - name: Check formatting
+        run: pnpm run format:check
+
+      - name: Run root tests
+        run: pnpm test
+
+      - name: Run server tests
+        run: |
+          cd pod-plugin/servers
+          pnpm test
+
+      - name: Check plugin structure
+        run: |
+          echo "Validating plugin directory structure..."
+          test -f pod-plugin/.claude-plugin/plugin.json || { echo "❌ Missing plugin.json"; exit 1; }
+          test -f pod-plugin/.mcp.json || { echo "❌ Missing .mcp.json"; exit 1; }
+          test -f pod-plugin/servers/dist/rag/index.js || { echo "❌ Missing compiled RAG server"; exit 1; }
+          test -d pod-plugin/skills/rag-query || { echo "❌ Missing rag-query skill"; exit 1; }
+          echo "✓ Plugin structure valid (v2.1.0 modular package architecture)"
+
+      - name: Validate JSON files
+        run: |
+          echo "Validating JSON syntax..."
+          node -e "JSON.parse(require('fs').readFileSync('pod-plugin/.claude-plugin/plugin.json'))" || { echo "❌ Invalid plugin.json"; exit 1; }
+          node -e "JSON.parse(require('fs').readFileSync('pod-plugin/.mcp.json'))" || { echo "❌ Invalid .mcp.json"; exit 1; }
+          node -e "JSON.parse(require('fs').readFileSync('pod-plugin/servers/package.json'))" || { echo "❌ Invalid servers/package.json"; exit 1; }
+          echo "✓ All JSON files valid"
+
+      - name: Check for forbidden files
+        run: |
+          echo "Checking plugin directory boundary..."
+          test ! -f pod-plugin/README.md || { echo "❌ Found README.md in plugin (should be at root)"; exit 1; }
+          test ! -f pod-plugin/DEVELOPMENT.md || { echo "❌ Found DEVELOPMENT.md in plugin"; exit 1; }
+          test ! -f pod-plugin/CONTRIBUTING.md || { echo "❌ Found CONTRIBUTING.md in plugin"; exit 1; }
+          test ! -d pod-plugin/tests || { echo "❌ Found tests/ in plugin"; exit 1; }
+          echo "✓ Plugin directory boundary respected"

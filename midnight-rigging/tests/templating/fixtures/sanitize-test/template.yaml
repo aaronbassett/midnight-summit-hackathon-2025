@@ -1,0 +1,5 @@
+name: Sanitize Test
+description: Test path sanitization
+requiredVariables:
+  - name: filename
+    description: Filename

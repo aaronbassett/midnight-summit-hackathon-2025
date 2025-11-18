@@ -1,0 +1,53 @@
+{
+  "name": "rigging-mcp",
+  "version": "1.0.0",
+  "description": "Universal cross-platform MCP server for exposing rigging-compatible skills and agents via HTTP",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "rigging-mcp": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test": "node --test",
+    "type-check": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "midnight-network",
+    "rigging",
+    "http-server",
+    "skills",
+    "agents",
+    "cross-platform"
+  ],
+  "author": "midnight network contributors",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aaronbassett/midnight-rigging.git",
+    "directory": "rigging-mcp"
+  },
+  "engines": {
+    "node": ">=24.11.0"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "@logtape/logtape": "^1.1.2",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.3",
+    "prettier": "^3.4.2"
+  },
+  "files": [
+    "dist",
+    "rigging.json.example",
+    "README.md"
+  ]
+}

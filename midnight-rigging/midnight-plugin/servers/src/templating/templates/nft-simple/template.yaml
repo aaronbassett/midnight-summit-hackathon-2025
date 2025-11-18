@@ -1,0 +1,88 @@
+name: NFT (Simple)
+description: ERC721-style NFT contract using SharedCounter for token IDs on pod network
+
+version: 1.0.0
+author: pod network
+license: MIT
+homepage: https://pod.network
+documentation: https://docs.v1.pod.network/
+repository: https://github.com/podnetwork/pod-sdk
+bugs: https://github.com/podnetwork/pod-sdk/issues
+keywords:
+  - nft
+  - erc-721
+  - non-fungible
+  - collectible
+  - solidity
+  - smart-contract
+  - pod-network
+  - fasttypes
+
+longDescription: |
+  An ERC721-style NFT contract for pod network using SharedCounter for order-independent token ID generation.
+
+  This template creates a standalone NFT contract that includes:
+  - SharedCounter for monotonic, order-independent token ID generation
+  - Transfer, mint, and burn functions
+  - Approval system (single token and operator approvals)
+  - Supply cap support (optional)
+
+  The contract follows ERC721 patterns and uses pod network FastTypes to ensure
+  correct behavior in the coordination-free execution model.
+
+useCases:
+  - Creating NFT collections
+  - Need unique token tracking
+  - Want ERC721-compatible interface
+  - Building collectibles or digital assets
+
+requiredVariables:
+  - name: contract_name
+    description: Name of the contract class (e.g., "MyNFT", "GameItems")
+  - name: collection_name
+    description: Human-readable collection name (e.g., "My NFT Collection")
+  - name: collection_symbol
+    description: Collection symbol (e.g., "MNFT", "ITEMS")
+  - name: max_supply
+    description: Maximum token supply (0 for unlimited)
+
+optionalVariables:
+  - name: license
+    description: SPDX license identifier
+    default: 'MIT'
+
+exampleStructure:
+  - '{{contract_name}}.sol'
+
+structure:
+  overview: |
+    Creates a standalone ERC721-style NFT contract using SharedCounter.
+
+    The contract includes:
+    - SharedCounter for order-independent token ID generation
+    - Transfer, mint, and burn functions
+    - Single token and operator approval systems
+    - Supply cap enforcement (if max_supply > 0)
+
+    Uses pod SDK FastTypes to ensure correct minting regardless of transaction order.
+
+  keyFiles:
+    - path: '{{contract_name}}.sol'
+      purpose: |
+        Main NFT contract with SharedCounter for token IDs.
+        Includes minting, transfers, and approval functions.
+        Customize: Add metadata URIs, public minting with payment, or rarity attributes.
+
+  commonCustomizations:
+    - 'Add tokenURI function with metadata support'
+    - 'Implement public minting with payment (mintPrice)'
+    - 'Add per-address minting limits'
+    - 'Implement rarity tiers or attributes'
+    - 'Add royalty support (ERC2981)'
+
+  nextSteps:
+    - "Run 'forge install podnetwork/pod-sdk' to install dependencies"
+    - 'Compile the contract with your Solidity compiler'
+    - 'Deploy with constructor parameters (name, symbol, maxSupply)'
+    - 'Call mint(address) to mint NFTs'
+    - 'Test minting concurrently to verify SharedCounter behavior'

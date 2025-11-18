@@ -1,0 +1,155 @@
+name: Notary Contract
+description: Document timestamping smart contract with cryptographic proof of existence for pod network
+
+version: 1.0.0
+author: pod network
+license: MIT
+homepage: https://pod.network
+documentation: https://docs.v1.pod.network/
+repository: https://github.com/podnetwork/pod-sdk
+bugs: https://github.com/podnetwork/pod-sdk/issues
+keywords:
+  - notary
+  - timestamp
+  - document
+  - proof-of-existence
+  - solidity
+  - smart-contract
+  - pod-network
+  - rust
+  - foundry
+  - blockchain
+
+longDescription: |
+  A complete document timestamping system for pod network with Rust CLI, Foundry tooling, and auto-generated bindings.
+
+  This template creates a production-ready notary project that includes:
+  - Solidity notary contract for timestamping document hashes
+  - Time-based timestamp submission using pod's Time.sol library
+  - Minimum timestamp tracking (earliest timestamp wins)
+  - Rust bindings auto-generated with forge bind
+  - Rust CLI application for timestamping and verification
+  - Document hash computation from files or stdin
+  - Human-readable timestamp formatting
+  - Real-time event streaming for timestamp notifications
+  - Makefile for streamlined binding generation workflow
+
+  The contract uses pod network's Time library for microsecond-precision timestamps
+  and ensures that once a document is timestamped, it maintains the earliest
+  submitted timestamp, providing cryptographic proof of existence.
+
+useCases:
+  - Creating proof-of-existence for documents on blockchain
+  - Timestamping intellectual property submissions
+  - Building document verification systems
+  - Learning pod network's Time library features
+  - Prototyping notarization services
+  - Creating audit trails with immutable timestamps
+
+requiredVariables:
+  - name: contract_name
+    description: Name of the notary contract (e.g., "Notary", "DocumentTimestamp")
+  - name: bindings_crate_name
+    description: Name for the Rust bindings crate (lowercase with hyphens, e.g., "notary-bindings")
+  - name: project_name
+    description: Main Rust project crate name (lowercase with hyphens, e.g., "notary")
+
+optionalVariables:
+  - name: default_contract_address
+    description: Default contract address for CLI (Ethereum address format)
+    default: '0x12296f2D128530a834460DF6c36a2895B793F26d'
+  - name: default_rpc_url
+    description: Default RPC URL for connecting to pod network
+    default: 'ws://localhost:8545'
+  - name: author
+    description: Project author name for Cargo.toml files
+    default: 'pod network Developer'
+
+exampleStructure:
+  - '{{contract_name}}.sol'
+  - 'foundry.toml'
+  - 'Makefile'
+  - 'Cargo.toml'
+  - 'bindings/Cargo.toml'
+  - 'src/main.rs'
+  - 'README.md'
+  - '.gitignore'
+
+structure:
+  overview: |
+    Creates a compact Rust project with embedded Solidity contract and auto-generated
+    bindings. The structure is simpler than multi-crate projects - the Solidity contract
+    lives at the root alongside Rust code.
+
+    The workflow is: forge build → make generate (bindings) → cargo build
+
+    Project structure uses a flat layout:
+    - Root level: Solidity contract, foundry.toml, Makefile, and root Cargo.toml
+    - bindings/: Auto-generated Rust bindings crate
+    - src/: Rust CLI application with timestamp, get-timestamp, and watch commands
+    - README.md: Complete setup and usage instructions
+
+  keyFiles:
+    - path: '{{contract_name}}.sol'
+      purpose: |
+        Main notary contract for timestamping document hashes.
+        Uses pod's Time library for microsecond-precision timestamps.
+        Maintains minimum timestamp for each document hash.
+        Customize: Add access control, batch timestamping, or revocation.
+
+    - path: 'Makefile'
+      purpose: |
+        Automates Rust binding generation using forge bind command.
+        Run 'make generate' to create/update bindings from compiled contract.
+        Customize: Adjust binding options or add deployment commands.
+
+    - path: 'foundry.toml'
+      purpose: |
+        Foundry configuration for Solidity compilation.
+        Uses root directory as source (src = ".") for flat structure.
+        Customize: Adjust Solidity compiler version or add test configurations.
+
+    - path: 'bindings/Cargo.toml'
+      purpose: |
+        Rust crate manifest for auto-generated contract bindings.
+        The src/ directory is populated by 'make generate'.
+        Customize: Update alloy version if needed.
+
+    - path: 'Cargo.toml'
+      purpose: |
+        Main Rust project manifest depending on bindings and pod-sdk.
+        Includes humantime for timestamp formatting.
+        Customize: Add additional crates for extended functionality.
+
+    - path: 'src/main.rs'
+      purpose: |
+        Rust CLI with timestamp, get-timestamp, and watch subcommands.
+        Handles document hashing, timestamp submission, and verification.
+        Supports stdin input for piping document content.
+        Customize: Add batch operations, signature verification, or export formats.
+
+    - path: 'README.md'
+      purpose: |
+        Complete project documentation with setup workflow.
+        Documents binding generation and CLI usage with examples.
+        Customize: Add deployment guides and use case examples.
+
+  commonCustomizations:
+    - 'Add batch timestamping for multiple documents'
+    - 'Implement timestamp revocation or updates with authorization'
+    - 'Add digital signature verification alongside timestamps'
+    - 'Extend CLI with document format support (PDF, images, etc.)'
+    - 'Add timestamp expiration or renewal mechanisms'
+    - 'Implement merkle tree for efficient bulk timestamping'
+    - 'Add metadata storage alongside timestamps'
+    - 'Create web interface for document timestamping'
+
+  nextSteps:
+    - "Run 'forge install podnetwork/pod-sdk' to install Solidity dependencies"
+    - "Run 'forge build' to compile the Solidity contract"
+    - "Run 'make generate' to create Rust bindings"
+    - 'Deploy the contract and note the contract address'
+    - "Run 'cargo build' to compile the CLI"
+    - "Use 'cargo run -- timestamp' to timestamp your first document"
+    - "Use 'cargo run -- get-timestamp' to verify timestamps"
+    - 'Check README.md for complete usage examples and workflow'
